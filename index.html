@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>עורך AI אולטימטיבי — תוסף חכם לאדובי אינדיזיין</title>
+<link rel="icon" type="image/gif" href="assets/images/logo-nav.gif">
+<meta name="description" content="עורך AI אולטימטיבי — תוסף AI חכם לאדובי אינדיזיין. עימוד ספרים, עריכת טקסט, סקריפטים אוטומטיים, Claude באינדיזיין — הכל בעברית. חינם לנצח עם 10 נקודות AI ביום!">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Entry Splash -->
+<div class="entry-splash" id="entrySplash">
+  <div class="fog-canvas">
+    <div class="fog-orb f1"></div>
+    <div class="fog-orb f2"></div>
+    <div class="fog-orb f3"></div>
+    <div class="fog-orb f4"></div>
+    <div class="fog-orb f5"></div>
+  </div>
+  <div class="scan-line"></div>
+  <div class="entry-content">
+    <img src="assets/images/logo-nav.gif" alt="לוגו" class="entry-logo">
+    <button class="entry-btn" onclick="enterSite()"><span class="btn-text">&#9654; הפעל את העורך</span></button>
+    <div class="entry-subtitle">ULTIMATE EDITOR &mdash; AI POWERED</div>
+  </div>
+</div>
+
+<!-- Background Music -->
+<audio id="bgMusic" loop preload="auto">
+  <source src="assets/audio/bg-music.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Music Player (floating) -->
+<div class="music-player" id="musicPlayer">
+  <button onclick="toggleMusic()" id="musicToggle" title="השתק/הפעל">&#127925;</button>
+  <input type="range" id="musicVol" min="0" max="100" value="20" oninput="setVolume(this.value)">
+  <span class="vol-label" id="volLabel">20%</span>
+</div>
+
+<!-- Custom Cursor -->
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<!-- ── Navigation ── -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-brand"><img src="assets/images/logo-nav.gif" alt="לוגו" style="height:28px;border-radius:6px;"> עורך AI אולטימטיבי</div>
+    <div class="nav-links">
+      <a href="#features">יכולות</a>
+      <a href="#gallery">צילומי מסך</a>
+      <a href="#marketplace">חנות סקריפטים</a>
+      <a href="#how">איך זה עובד</a>
+      <a href="#pricing">מחירים</a>
+      <a href="#faq">שאלות</a>
+      <a href="#download" class="nav-cta">הורדה חינם</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-orb o1"></div>
+    <div class="hero-orb o2"></div>
+  </div>
+  <div class="container">
+    <div class="hero-split">
+      <!-- Right side: Text -->
+      <div class="hero-text">
+        <div class="hero-badge">התוסף שכבש את שוק העימוד בישראל</div>
+        <h1>עימוד ספר שלם<br>בלחיצת כפתור</h1>
+        <p class="subtitle">שכחו מעבודה ידנית. עורך AI אולטימטיבי הופך את אדובי אינדיזיין למכונה אוטומטית — AI חכם שמבין עברית, 40+ כלים אוטומטיים, ותמלול קולי. הכלי שהחיים הקלים של כל מעצב ומעמד ספרים מתחילים איתו.</p>
+        <div class="cta-group">
+          <a href="#download" class="cta-btn">התחילו בחינם — 10 נקודות ביום</a>
+          <a href="#features" class="cta-btn-outline">גלו את היכולות</a>
+        </div>
+        <div class="hero-sub">
+          <span><span class="dot"></span> 10 נקודות AI חינם כל יום</span>
+          <span><span class="dot"></span> כלים אופליין ללא הגבלה</span>
+          <span><span class="dot"></span> תמיכה תוך 24 שעות בימי א-ה</span>
+        </div>
+      </div>
+      <!-- Left side: Product Mockup -->
+      <div class="hero-mockup-side">
+        <img src="assets/images/mockup.png" alt="הדמיה עורך אולטימטיבי" class="hero-mockup">
+      </div>
+    </div>
+    <!-- Explainer Video Placeholder -->
+    <div class="hero-explainer" id="explainerVideo" onclick="playExplainer(this)">
+      <div class="play-btn"></div>
+      <div class="vid-label">צפו בסרטון הסבר — 2 דקות</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Stats ── -->
+<section class="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat"><span class="num">40+</span><span class="lab">כלים אוטומטיים</span></div>
+      <div class="stat"><span class="num">114</span><span class="lab">פקודות AI</span></div>
+      <div class="stat"><span class="num">300ms</span><span class="lab">עימוד עמוד</span></div>
+      <div class="stat"><span class="num">100%</span><span class="lab">תמיכה בעברית</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Features ── -->
+<section class="features" id="features">
+  <div class="container">
+    <div style="text-align:center;">
+      <div class="section-tag">יכולות</div>
+      <h2 class="section-title">הכל בתוך תוסף אחד</h2>
+      <p class="section-sub">מעל 40 כלים חכמים שהופכים את אינדיזיין למכונת עימוד מושלמת</p>
+    </div>
+    <div class="fgrid">
+      <div class="fcard">
+        <div class="icon">&#129302;</div>
+        <h3>AI שמבין עברית</h3>
+        <p>שאלו שאלות, תנו הוראות בעברית — ה-AI מבין, מבצע, ומחזיר תשובה. עריכת טקסט, שינוי סגנונות, יצירת סקריפטים — הכל בשפה שלכם.</p>
+      </div>
+      <div class="fcard">
+        <div class="icon">&#128218;</div>
+        <h3>ניקוי טקסט חכם</h3>
+        <p>מנקה רווחים כפולים, מתקן פיסוק, ממיר מספרים — 20+ כללי ניקוי בלחיצה אחת. חוסך שעות של עבודה ידנית.</p>
+      </div>
+      <div class="fcard">
+        <div class="icon">&#128269;</div>
+        <h3>חיפוש GREP מתקדם</h3>
+        <p>חיפוש והחלפה עם ביטויים רגולריים ישירות מהפאנל. מציאת דפוסים, תיקון שגיאות מערכתיות, סטייל אוטומטי.</p>
+      </div>
+      <div class="fcard">
+        <div class="icon">&#127908;</div>
+        <h3>תמלול קולי</h3>
+        <p>דברו — והטקסט מופיע ישירות באינדיזיין. תמלול בזמן אמת בעברית עם פיסוק אוטומטי.</p>
+      </div>
+      <div class="fcard">
+        <div class="icon">&#9201;</div>
+        <h3>מונה שעות חכם</h3>
+        <p>עוקב אחרי זמן העבודה על כל מסמך, מחשב עלות ומייצא דוחות. חינם לנצח, ללא הגבלה.</p>
+      </div>
+      <div class="fcard">
+        <div class="icon">&#128187;</div>
+        <h3>יוצר סקריפטים</h3>
+        <p>מתארים מה רוצים בעברית — ה-AI כותב סקריפט ExtendScript מותאם אישית, בודק אותו ומריץ. אוטומציה ללא ידע בתכנות.</p>
+      </div>
+      <div class="fcard claude-card">
+        <div class="icon">&#129488;</div>
+        <h3>Claude באינדיזיין</h3>
+        <p>בדיוק כמו Claude בוורד — עורך חכם שיושב בתוך אינדיזיין. מנתח את המסמך, מתקן סגנונות, כותב קוד, ומבצע משימות מורכבות בכמה צעדים. זמין ממסלול Pro.</p>
+      </div>
+      <div class="fcard gemma-card">
+        <div class="icon">&#128214;</div>
+        <h3>עימוד מקצועי אוטומטי — Gemma 4</h3>
+        <p>מנוע AI ייעודי של גוגל לעימוד. מנתח כל עמוד ב-300ms ומתקן אלמנות, יתומים, נהרות וצפיפות שורות — תוצאה ברמת מעמד מנוסה. תמיכה מלאה בעברית, ניקוד ו-RTL.</p>
+      </div>
+      <div class="fcard">
+        <div class="icon">&#127912;</div>
+        <h3>יצירת תמונות AI</h3>
+        <p>תיאור טקסטואלי הופך לתמונה באיכות גבוהה — ישירות לתוך המסמך. עיצוב עטיפות, איורים, ורקעים בלחיצה.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Script Marketplace ── -->
+<section class="marketplace" id="marketplace">
+  <div class="container">
+    <div style="text-align:center;">
+      <div class="section-tag">חנות סקריפטים</div>
+      <h2 class="section-title">שוק הסקריפטים הראשון לאינדיזיין</h2>
+      <p class="section-sub">מהפכה בעולם האוטומציה — כל אחד יכול ליצור, למכור ולהרוויח מסקריפטים לאינדיזיין</p>
+    </div>
+    <div class="mp-grid">
+      <div class="mp-card">
+        <div class="mp-icon">&#128640;</div>
+        <h3>צרו סקריפטים ומכרו</h3>
+        <p>כתבתם סקריפט שחוסך שעות עבודה? העלו אותו לחנות, קבעו מחיר — והתחילו להרוויח. אנחנו מטפלים בתשלומים, הרישיון והפצה.</p>
+      </div>
+      <div class="mp-card">
+        <div class="mp-icon">&#128176;</div>
+        <h3>70% עמלה ליוצרים</h3>
+        <p>היוצרים מקבלים 70% מכל מכירה. בלי עלויות הצטרפות, בלי מינימום. הכסף מגיע ישירות אליכם כל חודש.</p>
+      </div>
+      <div class="mp-card">
+        <div class="mp-icon">&#127793;</div>
+        <h3>קהילה של יוצרים</h3>
+        <p>הצטרפו לקהילת מפתחים ומעצבים שמשתפים ידע, עוזרים אחד לשני ובונים כלים שמשנים את התעשייה.</p>
+      </div>
+    </div>
+    <div class="mp-highlight">
+      <h3>&#128161; למה זה מהפכני?</h3>
+      <p>עד היום, סקריפטים לאינדיזיין היו פזורים בפורומים, בלוגים ואתרים שונים — בלי סטנדרט, בלי אבטחה, ובלי דרך נוחה למכור או לקנות.
+      אנחנו בונים את הפלטפורמה הראשונה שמאחדת הכל — חנות אפליקציות לסקריפטים, ישירות מתוך אינדיזיין. כמו App Store, רק לעימוד.</p>
+      <p style="margin-top:14px;">כל סקריפט עובר בדיקת איכות ואבטחה לפני פרסום. התקנה בלחיצה אחת. עדכונים אוטומטיים. דירוגים וביקורות מהקהילה. ויוצרים יכולים לבנות עסק שלם סביב הכלים שהם כותבים.</p>
+      <div class="mp-stats">
+        <div class="mp-stat"><span class="num">70%</span><span class="lab">עמלה ליוצרים</span></div>
+        <div class="mp-stat"><span class="num">$0</span><span class="lab">עלות הצטרפות</span></div>
+        <div class="mp-stat"><span class="num">1-Click</span><span class="lab">התקנה מיידית</span></div>
+        <div class="mp-stat"><span class="num">&#9989;</span><span class="lab">בדיקת איכות</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── How it Works ── -->
+<section class="how" id="how">
+  <div class="container">
+    <div style="text-align:center;">
+      <div class="section-tag">איך זה עובד</div>
+      <h2 class="section-title">4 צעדים וזהו</h2>
+      <p class="section-sub">מהתקנה ועד עימוד אוטומטי — בפחות מ-5 דקות</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>הורדה</h3>
+        <p>מורידים את הקובץ ומעתיקים לתיקיית התוספים</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>הפעלה</h3>
+        <p>פותחים אינדיזיין מחדש ומפעילים את הפאנל</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>חיבור AI</h3>
+        <p>מתחילים עם 10 נקודות חינם — מיד עם ההתקנה</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>עובדים חכם</h3>
+        <p>AI + 40 כלים = עימוד מקצועי בזמן שיא</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Feature Screenshots Gallery ── -->
+<section class="screenshots-gallery" id="gallery">
+  <div class="container">
+    <div style="text-align:center;">
+      <div class="section-tag">הצצה מבפנים</div>
+      <h2 class="section-title">ראו בעצמכם — כך זה נראה</h2>
+      <p class="section-sub">צילומי מסך אמיתיים מתוך התוסף — כל כלי, כל יכולת, בפעולה</p>
+    </div>
+    <div class="scr-grid">
+      <div class="scr-card">
+        <img src="assets/screenshots/home-screen.jpg" alt="מסך פתיחה" class="scr-img">
+        <h3>מסך פתיחה — הצ'אט החכם</h3>
+        <p>ממשק נקי ואלגנטי. שאלו כל שאלה בעברית — תקנו מרכאות, סדרו טקסט לפי סגנונות, ייצאו PDF לדפוס, או נקו שגיאות עיצוב. הכל בהוראה אחת פשוטה.</p>
+      </div>
+      <div class="scr-card">
+        <img src="assets/screenshots/editor-tools.jpg" alt="עורך אולטימטיבי - כלים" class="scr-img">
+        <h3>העורך — 40+ כלים בגריד אחד</h3>
+        <p>חיפוש והחלפה, סוגריים ומרכאות, צבעים ודוגמיות, ניקוי מתקדם, ביטויי GREP, סגנונות, אוטומציה AI, ממפה סגנונות ועוד — הכל ארגון ונגיש, בלחיצה אחת.</p>
+      </div>
+      <div class="scr-card">
+        <img src="assets/screenshots/quick-actions.jpg" alt="כלים מהירים" class="scr-img">
+        <h3>כלים מהירים — Quick Actions</h3>
+        <p>6 פעולות שימושיות בגישה מיידית: סוגריים חכמים, החלפה אולטימטיבית, ניקוי טקסט, צבעים, אוטומציה ודוגם עיצוב. הפעולות הכי נפוצות — במרחק לחיצה.</p>
+      </div>
+      <div class="scr-card">
+        <img src="assets/screenshots/grep-search.jpg" alt="חיפוש GREP" class="scr-img">
+        <h3>חיפוש מתקדם — GREP</h3>
+        <p>מצאו כל דבר במסמך: מיילים, מספרים, טלפונים, לינקים, תאריכים — או הזינו ביטוי GREP חופשי. כלי חיפוש מקצועי שחוסך שעות של עבודה ידנית.</p>
+      </div>
+      <div class="scr-card">
+        <img src="assets/screenshots/script-creator.jpg" alt="יוצר סקריפטים" class="scr-img">
+        <h3>יוצר סקריפטים — AI</h3>
+        <p>צרו סקריפט חדש עם AI, תקנו סקריפט קיים, הפעילו שרשרת פעולות אוטומטית, או קבלו הסבר על קוד. אוטומציה מלאה — בלי ידע בתכנות.</p>
+      </div>
+      <div class="scr-card">
+        <img src="assets/screenshots/image-creator.jpg" alt="תמונות ויזואל" class="scr-img">
+        <h3>תמונות ויזואל</h3>
+        <p>צרו תמונות AI ישירות לתוך המסמך, שנו גודל תמונות, הציבו בעמוד, או צרו פלטת צבעים לפרויקט. כל הכלים הוויזואליים במקום אחד.</p>
+      </div>
+      <div class="scr-card">
+        <img src="assets/screenshots/doc-analyzer.jpg" alt="מנתח מסמך" class="scr-img">
+        <h3>מנתח מסמך</h3>
+        <p>ניתוח מלא אוף-ליין, ייצוא PDF לדפוס, יצירת תוכן עניינים אוטומטית, ודוח שגיאות — כל מה שצריך כדי לוודא שהמסמך מוכן להפקה.</p>
+      </div>
+      <div class="scr-card">
+        <img src="assets/screenshots/text-processor.jpg" alt="מעבד טקסט" class="scr-img">
+        <h3>מעבד טקסט — 12 כלי AI</h3>
+        <p>כתיב ודקדוק, קיצור והרחבה, שיפור ניסוח, שפה רשמית או ידידותית, תיקון פיסוק, ניקוד לעברית, סיכום, שכתוב — 12 כלים שמעבדים טקסט ברמה מקצועית.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Testimonials ── -->
+<section class="testimonials">
+  <div class="container">
+    <div style="text-align:center;">
+      <div class="section-tag">מה אומרים</div>
+      <h2 class="section-title">מעצבים שכבר עובדים חכם</h2>
+      <p class="section-sub">אלפי משתמשים בישראל ובעולם כבר עברו לעבודה אוטומטית</p>
+    </div>
+    <div class="tgrid">
+      <div class="tcard">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p>"חוסך לי לפחות שעתיים על כל ספר. הניקוי האוטומטי לבד שווה את ההשקעה."</p>
+        <div class="author">שרה כ.</div>
+        <div class="role">מעמדת ספרים, ירושלים</div>
+      </div>
+      <div class="tcard">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p>"העימוד האוטומטי של Gemma 4 זה משהו אחר. ספר של 300 עמודים מעומד תוך דקות."</p>
+        <div class="author">דוד מ.</div>
+        <div class="role">מנהל הוצאת ספרים</div>
+      </div>
+      <div class="tcard">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p>"Claude באינדיזיין זה כמו עוזר אישי שמבין עברית, עימוד וסגנונות. מדהים."</p>
+        <div class="author">יעל ר.</div>
+        <div class="role">מעצבת גרפית, תל אביב</div>
+      </div>
+    </div>
+
+    <!-- Real Customer Screenshots -->
+    <h3 style="text-align:center;margin-top:48px;font-size:1.2rem;font-weight:700;color:var(--gold);">&#128248; מה כותבים עלינו בשטח</h3>
+    <p style="text-align:center;color:var(--muted);font-size:.88rem;margin-bottom:28px;">צילומי מסך אמיתיים מלקוחות — פורומים, הודעות ומיילים</p>
+    <div class="tscr-grid">
+      <div class="tscr-card forum">
+        <img src="assets/testimonials/efirion-publishing.jpg" alt="אפיריון הוצאה לאור" class="tscr-img">
+        <div class="tscr-source">&#128488; פורום מעצבים</div>
+        <div class="tscr-author">אפיריון — הוצאה לאור</div>
+        <div class="tscr-role">ביקורת מפורטת על התוסף — "אחד הפרויקטים הכי מורכבים שיש בעולם" + המלצה חמה</div>
+      </div>
+      <div class="tscr-card email">
+        <img src="assets/testimonials/shlomo-prazon.jpg" alt="המלצה שלמה פרזון" class="tscr-img">
+        <div class="tscr-source">&#9993; טופס יצירת קשר</div>
+        <div class="tscr-author">שלמה</div>
+        <div class="tscr-role">"הסקריפט החדש עורך האולטימטיבי — מאוד מושקע ואיכותי"</div>
+      </div>
+      <div class="tscr-card forum">
+        <img src="assets/testimonials/chen-samui.jpg" alt="חן סמואי" class="tscr-img">
+        <div class="tscr-source">&#128488; פורום</div>
+        <div class="tscr-author">חן סמואי — מעצב ומעמד מקצועי</div>
+        <div class="tscr-role">"הבשורה שאתם מביאים לעולם התורה היא ענקית... המשיכו לייצר לנו סקריפטים שווים!"</div>
+      </div>
+      <div class="tscr-card forum">
+        <img src="assets/testimonials/israela.jpg" alt="ישראלה" class="tscr-img">
+        <div class="tscr-source">&#128488; פורום</div>
+        <div class="tscr-author">ישראלה</div>
+        <div class="tscr-role">"הואו! אין מילים לשכלול המטאורי של העורך האולטימטיבי — חלום של כל מעמד באינדיזיין!"</div>
+      </div>
+      <div class="tscr-card email">
+        <img src="assets/testimonials/mordechai.png" alt="מרדכי" class="tscr-img">
+        <div class="tscr-source">&#9993; טופס יצירת קשר</div>
+        <div class="tscr-author">מרדכי</div>
+        <div class="tscr-role">"תודה רבה על הסקריפט המטורף ועוד בכזה מחיר! אתמול קניתי וכבר הספקתי להשתמש יותר מסקריפטים אחרים שקניתי מזמן"</div>
+      </div>
+      <div class="tscr-card whatsapp">
+        <img src="assets/testimonials/studio-rimon.png" alt="סטודיו רימון" class="tscr-img">
+        <div class="tscr-source">&#128172; הודעה</div>
+        <div class="tscr-author">סטודיו רימון</div>
+        <div class="tscr-role">"מהשימוש הראשוני זה נראה מדהים ביותר... הסקריפט הזה הולך להרוויח למשתמשים הרבה"</div>
+      </div>
+      <div class="tscr-card forum">
+        <img src="assets/testimonials/tzach-malul.png" alt="צח מלול" class="tscr-img">
+        <div class="tscr-source">&#128488; פורום — עימוד מקצועי</div>
+        <div class="tscr-author">צח מלול</div>
+        <div class="tscr-role">"בתור חובב אינדיזיין מושבע... הסקריפט של חברי ואהובי איתמר הוא לא עוד סקריפט — אלא ממש משנה מציאות"</div>
+      </div>
+      <div class="tscr-card forum">
+        <img src="assets/testimonials/ta-hazi.png" alt="תא חזי" class="tscr-img">
+        <div class="tscr-source">&#128488; פורום</div>
+        <div class="tscr-author">תא חזי</div>
+        <div class="tscr-role">ביקורת מעמיקה על יכולות התוסף והשוואה לכלים אחרים בשוק</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Free Trial ── -->
+<section class="trial">
+  <div class="container">
+    <div class="trial-box">
+      <h3>חינם לנצח — 10 נקודות AI כל יום, בלי התחייבות</h3>
+      <p>מונה שעות ללא הגבלה + כלים בסיסיים + Gemini Flash AI. נגמרו הנקודות? שדרגו מ-$5 בלבד או קנו חבילת נקודות חד-פעמית.</p>
+      <a href="#download" class="cta-btn" style="font-size:.9rem;padding:14px 32px;">אני רוצה לנסות</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Pricing ── -->
+<section class="pricing" id="pricing">
+  <div class="container">
+    <div class="pricing-header">
+      <div class="section-tag">מחירים</div>
+      <h2 class="section-title">תוכניות שמתאימות לכל אחד</h2>
+      <p class="section-sub">התחילו בחינם עם 10 נקודות ביום. שדרגו כשמוכנים.</p>
+    </div>
+    <div class="plans">
+      <div class="plan free-plan">
+        <h3>חינמי</h3>
+        <div class="price">$0</div>
+        <div class="per">10 נקודות ביום — לנצח</div>
+        <ul>
+          <li>Gemini Flash AI</li>
+          <li>מונה שעות ללא הגבלה</li>
+          <li>כלים בסיסיים מוגבלים</li>
+          <li>1 סקריפט ביום</li>
+        </ul>
+        <a href="#download" class="btn">הורד בחינם</a>
+      </div>
+      <div class="plan">
+        <h3>Starter</h3>
+        <div class="price">$5 <small>/חודש</small></div>
+        <div class="per">$48/שנה (חיסכון 20%)</div>
+        <ul>
+          <li>200 נקודות AI בחודש</li>
+          <li>GPT-4o mini + Claude Haiku</li>
+          <li>כלים ללא הגבלה</li>
+          <li>עימוד Gemma 4</li>
+          <li>חנות סקריפטים</li>
+        </ul>
+        <a href="#" class="btn">שדרג ל-Starter</a>
+      </div>
+      <div class="plan popular">
+        <h3>Pro</h3>
+        <div class="price">$10 <small>/חודש</small></div>
+        <div class="per">$96/שנה (חיסכון 20%)</div>
+        <ul>
+          <li>500 נקודות AI בחודש</li>
+          <li>כל המנועים כולל Claude Sonnet</li>
+          <li>כלים ללא הגבלה</li>
+          <li>Claude באינדיזיין</li>
+          <li>Smart Routing אוטומטי</li>
+          <li>יצירת תמונות AI</li>
+        </ul>
+        <a href="#" class="btn">שדרג ל-Pro</a>
+      </div>
+      <div class="plan">
+        <h3>Advanced</h3>
+        <div class="price">$15 <small>/חודש</small></div>
+        <div class="per">$144/שנה (חיסכון 20%)</div>
+        <ul>
+          <li>1,000 נקודות AI בחודש</li>
+          <li>כל המנועים + עדיפות</li>
+          <li>Claude מתקדם באינדיזיין</li>
+          <li>תמיכה מועדפת</li>
+          <li>עימוד ספרים שלמים</li>
+        </ul>
+        <a href="#" class="btn">שדרג ל-Advanced</a>
+      </div>
+      <div class="plan">
+        <h3>Premium</h3>
+        <div class="price">$20 <small>/חודש</small></div>
+        <div class="per">$192/שנה (חיסכון 20%)</div>
+        <ul>
+          <li>2,000 נקודות AI בחודש</li>
+          <li>כל המנועים + Claude Opus</li>
+          <li>Claude Ultra באינדיזיין</li>
+          <li>תמיכה VIP תוך שעה</li>
+          <li>גישה מוקדמת לפיצ'רים</li>
+        </ul>
+        <a href="#" class="btn">שדרג ל-Premium</a>
+      </div>
+    </div>
+
+    <!-- Comparison Table -->
+    <div class="compare-table">
+      <table>
+        <thead>
+          <tr>
+            <th>פיצ'ר</th>
+            <th>חינמי</th>
+            <th>Starter $5</th>
+            <th class="highlight-col">Pro $10</th>
+            <th>Advanced $15</th>
+            <th>Premium $20</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>מונה שעות</td><td class="check">&#10003; ללא הגבלה</td><td class="check">&#10003;</td><td class="check highlight-col">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+          <tr><td>נקודות AI</td><td>10/יום</td><td>200/חודש</td><td class="highlight-col"><strong>500/חודש</strong></td><td>1,000/חודש</td><td>2,000/חודש</td></tr>
+          <tr><td>מנוע AI חינמי</td><td>Gemini Flash</td><td>Flash + GPT mini</td><td class="highlight-col">כל המנועים</td><td>כל המנועים</td><td>כל המנועים</td></tr>
+          <tr><td>Claude באינדיזיין</td><td class="no">—</td><td class="no">—</td><td class="check highlight-col">&#10003; Sonnet</td><td class="check">&#10003; Sonnet</td><td class="check">&#10003; Opus</td></tr>
+          <tr><td>עימוד Gemma 4</td><td class="no">—</td><td class="check">&#10003;</td><td class="check highlight-col">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+          <tr><td>ניקוי טקסט</td><td>3/יום</td><td class="check">&#10003; ללא הגבלה</td><td class="check highlight-col">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+          <tr><td>חיפוש/GREP</td><td>5/יום</td><td class="check">&#10003; ללא הגבלה</td><td class="check highlight-col">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+          <tr><td>יצירת סקריפט</td><td>1/יום</td><td class="check">&#10003;</td><td class="check highlight-col">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+          <tr><td>יצירת תמונות AI</td><td class="no">—</td><td class="no">—</td><td class="check highlight-col">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+          <tr><td>חנות סקריפטים</td><td class="no">—</td><td class="check">&#10003;</td><td class="check highlight-col">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+          <tr><td>Smart Routing</td><td class="no">—</td><td class="no">—</td><td class="check highlight-col">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+          <tr><td>תמיכה</td><td>פורום</td><td>תוך 24 שעות בימי א-ה</td><td class="highlight-col">תוך 24 שעות בימי א-ה</td><td>מועדפת בימי א-ה</td><td><strong>VIP תוך שעה בימי א-ה</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── Download / Registration ── -->
+<section class="download-section" id="download">
+  <div class="container">
+    <div class="download-box">
+      <div class="gift-badge">&#127873; מתנה: 50 נקודות בונוס להורדה ראשונה</div>
+      <h2>הורדה חינם + מתנה</h2>
+      <p>הזינו את האימייל שלכם כדי לקבל את קישור ההורדה + מדריך התקנה + 50 נקודות בונוס במתנה. יש קופון? הוסיפו אותו למטה.</p>
+      <form class="dl-form" onsubmit="return handleDownload(event)">
+        <input type="email" id="dl-email" placeholder="כתובת אימייל" required>
+        <input type="text" id="dl-name" placeholder="שם מלא (אופציונלי)">
+        <div class="coupon-row">
+          <input type="text" id="dl-coupon" placeholder="קוד קופון (אופציונלי)">
+          <button type="button" onclick="validateCoupon()">בדיקה</button>
+        </div>
+        <div class="coupon-msg" id="coupon-msg"></div>
+        <button type="submit" class="dl-btn">שלחו לי את הקישור</button>
+        <div class="disclaimer">לא נשלח ספאם. תמיד אפשר לבטל.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ── -->
+<section class="faq" id="faq">
+  <div class="container">
+    <div class="faq-header">
+      <div class="section-tag">שאלות נפוצות</div>
+      <h2 class="section-title">יש שאלות? יש תשובות</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">מה זה נקודות AI?</div>
+        <div class="faq-a"><p>כל פעולת AI צורכת נקודות. שאלה פשוטה = 1 נקודה, Claude Sonnet = 5 נקודות, יצירת תמונה = 10. במסלול חינמי מקבלים 10 נקודות ביום עם Gemini Flash. מנויים מקבלים 200-2,000 נקודות בחודש עם גישה לכל המנועים.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">מה קורה כשנגמרות הנקודות?</div>
+        <div class="faq-a"><p>במסלול חינמי — הנקודות מתחדשות כל יום. במנויים בתשלום — הנקודות מתחדשות כל חודש. רוצים עוד? אפשר לקנות חבילות נקודות חד-פעמיות החל מ-$3. הכלים המקומיים (ניקוי, חיפוש, מונה שעות) עובדים תמיד.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">מה זה Claude באינדיזיין?</div>
+        <div class="faq-a"><p>בדיוק כמו ש-Claude עובד בתוך Word, אצלנו הוא עובד ישירות באינדיזיין. Claude מבין את המסמך שלכם, מנתח את העימוד, כותב סקריפטים, מתקן סגנונות, ומבצע משימות מורכבות בכמה צעדים — הכל בעברית. זמין ממסלול Pro ומעלה.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">מה זה עימוד Gemma 4?</div>
+        <div class="faq-a"><p>Gemma 4 הוא מנוע AI ייעודי של גוגל שאנחנו שילבנו לעימוד מקצועי. הוא מנתח כל עמוד ב-300 מילישניות ומתקן אוטומטית בעיות כמו אלמנות, יתומים, נהרות, וצפיפות שורות — תוצאה ברמת מעמד מנוסה. עובד מושלם עם עברית, ניקוד ו-RTL.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">מתאים להוצאות לאור?</div>
+        <div class="faq-a"><p>בהחלט. הוצאות לאור שעובדות עם כמה מעמדים חוסכות תקציבים משמעותיים. עימוד Gemma 4 מעבד ספר שלם של 300 עמודים בפחות מ-2 דקות. כל מעמד עובד מהר יותר, עם פחות טעויות, ויכול לקחת יותר פרויקטים.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">זה עובד בלי אינטרנט?</div>
+        <div class="faq-a"><p>חלק גדול מהכלים עובד אופליין. רק פיצ'רים שדורשים AI צריכים חיבור. גם אם נפל האינטרנט — ממשיכים לעבוד.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">באיזה גרסה של אינדיזיין זה עובד?</div>
+        <div class="faq-a"><p>Adobe InDesign CC 2019 ומעלה (גרסה 14+). Windows ו-Mac.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">איך מתקינים?</div>
+        <div class="faq-a"><p>מורידים, מעתיקים לתיקיית התוספים, ופותחים מחדש. פחות מדקה. מדריך מלא מגיע עם הקובץ.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">אני מפתח — אפשר להתחבר עם מפתח API עצמי?</div>
+        <div class="faq-a"><p>כן! למפתחים ומשתמשים מתקדמים יש אזור מפתחים ייעודי בתוך התוסף. שם ניתן לחבר מפתחות API עצמיים של OpenAI, Google, Anthropic ועוד — וליהנות מגישה חופשית ללא מגבלת נקודות. <a href="#contact">צרו קשר</a> לפרטים על גישת מפתחים.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Contact / Support ── -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="contact-header">
+      <div class="section-tag">צור קשר</div>
+      <h2 class="section-title">תמיכה מלאה תוך 24 שעות בימי א-ה</h2>
+      <p class="section-sub">אנחנו כאן בשבילכם בימי ראשון עד חמישי — שאלות, בעיות, בקשות פיצ'רים. תמיד שמחים לעזור.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="c-icon">&#9993;</div>
+        <h3>אימייל</h3>
+        <p>שלחו לנו מייל ונחזור אליכם תוך 24 שעות בימי א-ה.</p>
+        <a href="#" class="reveal-email" onclick="this.textContent='shlmut@otzmashelkesher.co.il';this.href='mailto:shlmut@otzmashelkesher.co.il';this.onclick=null;return false;">לחצו לחשיפת כתובת המייל</a>
+      </div>
+      <div class="contact-card">
+        <div class="c-icon">&#128218;</div>
+        <h3>מדריכים והדרכה</h3>
+        <p>מדריכי וידאו, תיעוד מלא ומדריך התחלה מהירה — הכל בעברית.</p>
+        <a href="#">למרכז הידע</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Final CTA ── -->
+<section class="final-cta">
+  <div class="container">
+    <div class="final-box">
+      <h2>מוכנים <span>לשנות את דרך העבודה</span>?</h2>
+      <p>הצטרפו למעמדים, מעצבים והוצאות לאור שכבר עובדים חכם. עימוד ספר שלם בלחיצת כפתור — זו לא עתידנות, זו המציאות.</p>
+      <a href="#download" class="cta-btn">התחילו בחינם עכשיו</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/images/logo-nav.gif" alt="לוגו" style="height:36px;border-radius:8px;margin-bottom:6px;display:block;">
+        <h4>עורך AI אולטימטיבי</h4>
+        <p>התוסף החכם ביותר לאדובי אינדיזיין</p>
+      </div>
+      <div class="footer-links">
+        <a href="#features">יכולות</a>
+        <a href="#pricing">מחירים</a>
+        <a href="#faq">שאלות נפוצות</a>
+        <a href="#contact">צור קשר</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024-2026 עורך AI אולטימטיבי. כל הזכויות שמורות.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+
+</body>
+</html>

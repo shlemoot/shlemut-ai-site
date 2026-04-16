@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ניהול האתר — עורך AI אולטימטיבי</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+/* ===== RESET & BASE ===== */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f1117;--bg2:#1a1d27;--bg3:#252836;--bg4:#2d3142;
+  --text:#e4e4e7;--muted:#9ca3af;--gold:#f5c542;--gold2:#d4a934;
+  --accent:#6366f1;--accent2:#818cf8;--green:#22c55e;--red:#ef4444;
+  --blue:#3b82f6;--border:#374151;--radius:12px;
+  --shadow:0 4px 24px rgba(0,0,0,.4);
+}
+body{font-family:'Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+a{color:var(--accent2);text-decoration:none}
+input,textarea,select{font-family:inherit;font-size:14px}
+button{cursor:pointer;font-family:inherit}
+
+/* ===== LOGIN SCREEN ===== */
+.login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#0f1117 0%,#1a1d27 50%,#252836 100%)}
+.login-box{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:48px;width:400px;max-width:90vw;text-align:center;box-shadow:var(--shadow)}
+.login-box h1{font-size:24px;margin-bottom:8px;color:var(--gold)}
+.login-box p{color:var(--muted);font-size:14px;margin-bottom:32px}
+.login-box input{width:100%;padding:14px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:16px;text-align:center;margin-bottom:16px;transition:border .2s}
+.login-box input:focus{outline:none;border-color:var(--gold)}
+.login-box button{width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;font-weight:700;font-size:16px;border:none;border-radius:var(--radius);transition:transform .15s,box-shadow .15s}
+.login-box button:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(245,197,66,.3)}
+.login-error{color:var(--red);font-size:13px;margin-top:8px;display:none}
+
+/* ===== DASHBOARD LAYOUT ===== */
+.dashboard{display:none;min-height:100vh}
+.sidebar{position:fixed;right:0;top:0;bottom:0;width:260px;background:var(--bg2);border-left:1px solid var(--border);padding:20px 0;overflow-y:auto;z-index:100}
+.sidebar-header{padding:16px 24px;border-bottom:1px solid var(--border);margin-bottom:12px;display:flex;align-items:center;gap:12px}
+.sidebar-header img{width:32px;height:32px;border-radius:8px}
+.sidebar-header h2{font-size:15px;color:var(--gold)}
+.sidebar-header span{font-size:11px;color:var(--muted);display:block}
+
+.nav-section{padding:0 12px;margin-bottom:16px}
+.nav-section-title{font-size:11px;text-transform:uppercase;color:var(--muted);letter-spacing:1px;padding:8px 12px;font-weight:600}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:8px;color:var(--muted);cursor:pointer;transition:all .15s;font-size:14px}
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:var(--accent);background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(129,140,248,.1));color:var(--accent2);font-weight:600}
+.nav-item .icon{font-size:18px;width:24px;text-align:center}
+
+.main{margin-right:260px;padding:32px;min-height:100vh}
+
+/* ===== TOP BAR ===== */
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.topbar h1{font-size:22px;font-weight:700}
+.topbar-actions{display:flex;gap:12px;align-items:center}
+.btn{padding:10px 20px;border-radius:var(--radius);font-size:14px;font-weight:600;border:none;transition:all .15s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(245,197,66,.25)}
+.btn-secondary{background:var(--bg3);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{background:var(--bg4)}
+.btn-danger{background:var(--red);color:#fff}
+.btn-danger:hover{opacity:.9}
+.btn-sm{padding:6px 14px;font-size:12px}
+.btn-icon{width:36px;height:36px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:8px}
+
+/* ===== STATUS BAR ===== */
+.status-bar{position:fixed;bottom:0;left:0;right:260px;background:var(--bg2);border-top:1px solid var(--border);padding:10px 32px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);z-index:99}
+.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-left:6px}
+.status-dot.online{background:var(--green)}
+.status-dot.saving{background:var(--gold);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ===== SECTION PANELS ===== */
+.section-panel{display:none}
+.section-panel.active{display:block}
+
+/* ===== CARDS ===== */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.card-header h3{font-size:16px;font-weight:600}
+.card-header .badge{background:var(--bg3);padding:4px 10px;border-radius:20px;font-size:11px;color:var(--muted)}
+
+/* ===== FORM ELEMENTS ===== */
+.form-group{margin-bottom:20px}
+.form-group label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:12px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);transition:border .2s}
+.form-group input:focus,.form-group textarea:focus{outline:none;border-color:var(--accent)}
+.form-group textarea{min-height:80px;resize:vertical}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-row.three{grid-template-columns:1fr 1fr 1fr}
+.form-hint{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* ===== LIST ITEMS ===== */
+.list-item{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px;transition:border .2s}
+.list-item:hover{border-color:var(--accent)}
+.list-item-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.list-item-title{font-weight:600;font-size:14px}
+.list-item-actions{display:flex;gap:6px}
+.drag-handle{cursor:grab;color:var(--muted);padding:4px}
+
+/* ===== PREVIEW ===== */
+.preview-frame{background:#000;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)}
+.preview-frame iframe{width:100%;height:600px;border:none}
+
+/* ===== TOAST NOTIFICATIONS ===== */
+.toast-container{position:fixed;top:20px;left:20px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.toast{padding:14px 20px;border-radius:8px;font-size:14px;font-weight:500;animation:slideIn .3s ease;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow)}
+.toast.success{background:#065f46;color:#6ee7b7;border:1px solid #10b981}
+.toast.error{background:#7f1d1d;color:#fca5a5;border:1px solid #ef4444}
+.toast.info{background:#1e3a5f;color:#93c5fd;border:1px solid #3b82f6}
+@keyframes slideIn{from{transform:translateX(-100%);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* ===== ADD BUTTON ===== */
+.add-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;background:transparent;border:2px dashed var(--border);border-radius:8px;color:var(--muted);font-size:14px;transition:all .2s}
+.add-btn:hover{border-color:var(--accent);color:var(--accent2);background:rgba(99,102,241,.05)}
+
+/* ===== OVERVIEW CARDS ===== */
+.overview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:32px}
+.overview-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;cursor:pointer;transition:all .2s}
+.overview-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+.overview-card .icon{font-size:32px;margin-bottom:8px}
+.overview-card h4{font-size:14px;margin-bottom:4px}
+.overview-card p{font-size:12px;color:var(--muted)}
+
+/* ===== IMAGE UPLOAD ===== */
+.image-upload{border:2px dashed var(--border);border-radius:8px;padding:24px;text-align:center;cursor:pointer;transition:all .2s}
+.image-upload:hover{border-color:var(--accent)}
+.image-upload img{max-width:200px;max-height:150px;border-radius:8px;margin-bottom:12px}
+.image-upload p{font-size:13px;color:var(--muted)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  .sidebar{width:100%;height:auto;position:relative;border-left:none;border-bottom:1px solid var(--border)}
+  .main{margin-right:0}
+  .status-bar{right:0}
+  .form-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN SCREEN ===== -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div style="font-size:48px;margin-bottom:16px">🛡️</div>
+    <h1>ניהול האתר</h1>
+    <p>עורך AI אולטימטיבי — לוח הבקרה</p>
+    <input type="password" id="passwordInput" placeholder="הזן סיסמה" autofocus>
+    <button onclick="login()">כניסה</button>
+    <div class="login-error" id="loginError">סיסמה שגויה, נסה שוב</div>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div class="dashboard" id="dashboard">
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <div style="width:32px;height:32px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px">🎨</div>
+      <div>
+        <h2>לוח בקרה</h2>
+        <span>shlemut-ai.com</span>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">ראשי</div>
+      <div class="nav-item active" data-section="overview"><span class="icon">📊</span> סקירה כללית</div>
+      <div class="nav-item" data-section="hero"><span class="icon">🏠</span> דף הבית (Hero)</div>
+      <div class="nav-item" data-section="stats"><span class="icon">📈</span> סטטיסטיקות</div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">תוכן</div>
+      <div class="nav-item" data-section="features"><span class="icon">⚡</span> יכולות</div>
+      <div class="nav-item" data-section="testimonials"><span class="icon">💬</span> חוות דעת</div>
+      <div class="nav-item" data-section="pricing"><span class="icon">💰</span> מחירים</div>
+      <div class="nav-item" data-section="faq"><span class="icon">❓</span> שאלות נפוצות</div>
+      <div class="nav-item" data-section="contact"><span class="icon">📧</span> צור קשר</div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">כלים</div>
+      <div class="nav-item" data-section="preview"><span class="icon">👁️</span> תצוגה מקדימה</div>
+      <div class="nav-item" data-section="settings"><span class="icon">⚙️</span> הגדרות</div>
+    </div>
+
+    <div style="padding:16px 24px;margin-top:auto;border-top:1px solid var(--border)">
+      <button class="btn btn-secondary" style="width:100%;font-size:12px" onclick="logout()">🚪 יציאה</button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main">
+
+    <!-- ===== OVERVIEW ===== -->
+    <div class="section-panel active" id="sec-overview">
+      <div class="topbar">
+        <h1>סקירה כללית</h1>
+        <div class="topbar-actions">
+          <button class="btn btn-secondary btn-sm" onclick="loadContent()">🔄 רענון</button>
+          <button class="btn btn-primary" onclick="saveAll()">💾 שמור הכל</button>
+        </div>
+      </div>
+      <div class="overview-grid">
+        <div class="overview-card" onclick="navigateTo('hero')"><div class="icon">🏠</div><h4>דף הבית</h4><p>כותרת, תיאור, כפתורים</p></div>
+        <div class="overview-card" onclick="navigateTo('stats')"><div class="icon">📈</div><h4>סטטיסטיקות</h4><p>מספרים ותוויות</p></div>
+        <div class="overview-card" onclick="navigateTo('features')"><div class="icon">⚡</div><h4>יכולות</h4><p id="featCount">0 פריטים</p></div>
+        <div class="overview-card" onclick="navigateTo('testimonials')"><div class="icon">💬</div><h4>חוות דעת</h4><p id="testCount">0 חוות דעת</p></div>
+        <div class="overview-card" onclick="navigateTo('pricing')"><div class="icon">💰</div><h4>מחירים</h4><p id="planCount">0 תוכניות</p></div>
+        <div class="overview-card" onclick="navigateTo('faq')"><div class="icon">❓</div><h4>שאלות נפוצות</h4><p id="faqCount">0 שאלות</p></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>מידע על האתר</h3></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px">
+          <div>🌐 <strong>דומיין:</strong> <a href="https://shlemut-ai.com" target="_blank">shlemut-ai.com</a></div>
+          <div>📅 <strong>עדכון אחרון:</strong> <span id="lastModified">—</span></div>
+          <div>📦 <strong>גרסה:</strong> <span id="contentVersion">—</span></div>
+          <div>🟢 <strong>סטטוס:</strong> <span style="color:var(--green)">פעיל</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== HERO SECTION ===== -->
+    <div class="section-panel" id="sec-hero">
+      <div class="topbar">
+        <h1>🏠 דף הבית (Hero)</h1>
+        <div class="topbar-actions">
+          <button class="btn btn-primary" onclick="saveSection('hero')">💾 שמור</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>כותרת ותיאור</h3></div>
+        <div class="form-group">
+          <label>תג עליון (Badge)</label>
+          <input type="text" id="hero-badge" placeholder="התוסף שכבש את שוק העימוד...">
+        </div>
+        <div class="form-group">
+          <label>כותרת ראשית</label>
+          <textarea id="hero-title" rows="2" placeholder="עימוד ספר שלם בלחיצת כפתור"></textarea>
+          <div class="form-hint">שורה חדשה = ירידת שורה בכותרת</div>
+        </div>
+        <div class="form-group">
+          <label>תיאור משנה</label>
+          <textarea id="hero-subtitle" rows="3" placeholder="תיאור קצר של המוצר..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>כפתור ראשי (CTA)</label>
+            <input type="text" id="hero-cta_primary" placeholder="התחילו בחינם">
+          </div>
+          <div class="form-group">
+            <label>כפתור משני</label>
+            <input type="text" id="hero-cta_secondary" placeholder="גלו את היכולות">
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>תכונות מהירות (מתחת לכפתורים)</h3></div>
+        <div id="hero-features-list"></div>
+        <button class="add-btn" onclick="addHeroFeature()">+ הוסף תכונה</button>
+      </div>
+    </div>
+
+    <!-- ===== STATS SECTION ===== -->
+    <div class="section-panel" id="sec-stats">
+      <div class="topbar">
+        <h1>📈 סטטיסטיקות</h1>
+        <div class="topbar-actions">
+          <button class="btn btn-primary" onclick="saveSection('stats')">💾 שמור</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>מספרים ותוויות</h3></div>
+        <div id="stats-list"></div>
+        <button class="add-btn" onclick="addStat()">+ הוסף סטטיסטיקה</button>
+      </div>
+    </div>
+
+    <!-- ===== FEATURES SECTION ===== -->
+    <div class="section-panel" id="sec-features">
+      <div class="topbar">
+        <h1>⚡ יכולות</h1>
+        <div class="topbar-actions">
+          <button class="btn btn-primary" onclick="saveSection('features')">💾 שמור</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>כותרות הסעיף</h3></div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>כותרת</label>
+            <input type="text" id="features-title">
+          </div>
+          <div class="form-group">
+            <label>תת-כותרת</label>
+            <input type="text" id="features-subtitle">
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>רשימת יכולות</h3><span class="badge" id="featBadge">0</span></div>
+        <div id="features-list"></div>
+        <button class="add-btn" onclick="addFeature()">+ הוסף יכולת</button>
+      </div>
+    </div>
+
+    <!-- ===== TESTIMONIALS SECTION ===== -->
+    <div class="section-panel" id="sec-testimonials">
+      <div class="topbar">
+        <h1>💬 חוות דעת</h1>
+        <div class="topbar-actions">
+          <button class="btn btn-primary" onclick="saveSection('testimonials')">💾 שמור</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>כותרות</h3></div>
+        <div class="form-row">
+          <div class="form-group"><label>כותרת</label><input type="text" id="testimonials-title"></div>
+          <div class="form-group"><label>תת-כותרת</label><input type="text" id="testimonials-subtitle"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>ביקורות טקסט</h3></div>
+        <div id="testimonials-items-list"></div>
+        <button class="add-btn" onclick="addTestimonialItem()">+ הוסף ביקורת</button>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>צילומי מסך (חוות דעת מצולמות)</h3></div>
+        <div id="testimonials-screenshots-list"></div>
+        <button class="add-btn" onclick="addTestimonialScreenshot()">+ הוסף צילום מסך</button>
+      </div>
+    </div>
+
+    <!-- ===== PRICING SECTION ===== -->
+    <div class="section-panel" id="sec-pricing">
+      <div class="topbar">
+        <h1>💰 מחירים</h1>
+        <div class="topbar-actions">
+          <button class="btn btn-primary" onclick="saveSection('pricing')">💾 שמור</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>כותרות</h3></div>
+        <div class="form-row">
+          <div class="form-group"><label>כותרת</label><input type="text" id="pricing-title"></div>
+          <div class="form-group"><label>תת-כותרת</label><input type="text" id="pricing-subtitle"></div>
+        </div>
+      </div>
+      <div id="pricing-plans-list"></div>
+      <button class="add-btn" onclick="addPlan()">+ הוסף תוכנית</button>
+    </div>
+
+    <!-- ===== FAQ SECTION ===== -->
+    <div class="section-panel" id="sec-faq">
+      <div class="topbar">
+        <h1>❓ שאלות נפוצות</h1>
+        <div class="topbar-actions">
+          <button class="btn btn-primary" onclick="saveSection('faq')">💾 שמור</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>כותרת הסעיף</h3></div>
+        <div class="form-group"><label>כותרת</label><input type="text" id="faq-title"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>שאלות</h3><span class="badge" id="faqBadge">0</span></div>
+        <div id="faq-list"></div>
+        <button class="add-btn" onclick="addFaq()">+ הוסף שאלה</button>
+      </div>
+    </div>
+
+    <!-- ===== CONTACT SECTION ===== -->
+    <div class="section-panel" id="sec-contact">
+      <div class="topbar">
+        <h1>📧 צור קשר</h1>
+        <div class="topbar-actions">
+          <button class="btn btn-primary" onclick="saveSection('contact')">💾 שמור</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="form-group"><label>כותרת</label><input type="text" id="contact-title"></div>
+        <div class="form-group"><label>תיאור</label><textarea id="contact-subtitle" rows="2"></textarea></div>
+      </div>
+    </div>
+
+    <!-- ===== PREVIEW ===== -->
+    <div class="section-panel" id="sec-preview">
+      <div class="topbar">
+        <h1>👁️ תצוגה מקדימה</h1>
+        <div class="topbar-actions">
+          <button class="btn btn-secondary" onclick="refreshPreview()">🔄 רענון</button>
+          <a href="https://shlemut-ai.com" target="_blank" class="btn btn-primary">🌐 פתח באתר</a>
+        </div>
+      </div>
+      <div class="preview-frame">
+        <iframe id="previewFrame" src="https://shlemut-ai.com"></iframe>
+      </div>
+    </div>
+
+    <!-- ===== SETTINGS ===== -->
+    <div class="section-panel" id="sec-settings">
+      <div class="topbar">
+        <h1>⚙️ הגדרות</h1>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>הגדרות אתר</h3></div>
+        <div class="form-group"><label>כותרת האתר (Title Tag)</label><input type="text" id="site-title"></div>
+        <div class="form-group"><label>תיאור (Meta Description)</label><textarea id="site-description" rows="2"></textarea></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>גיבוי ושחזור</h3></div>
+        <div style="display:flex;gap:12px">
+          <button class="btn btn-secondary" onclick="downloadBackup()">📥 הורד גיבוי</button>
+          <button class="btn btn-secondary" onclick="document.getElementById('restoreFile').click()">📤 שחזר מגיבוי</button>
+          <input type="file" id="restoreFile" accept=".json" style="display:none" onchange="restoreBackup(this)">
+          <button class="btn btn-danger btn-sm" onclick="resetContent()">🗑️ אפס תוכן</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>שינוי סיסמה</h3></div>
+        <div class="form-hint" style="margin-bottom:12px">הסיסמה מוגדרת בקוד ה-Worker. כדי לשנות אותה יש לעדכן את הקובץ worker.js ולפרוס מחדש.</div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <div><span class="status-dot online" id="statusDot"></span> <span id="statusText">מחובר</span></div>
+    <div>עורך AI אולטימטיבי — לוח בקרה v1.0</div>
+  </div>
+
+</div><!-- /dashboard -->
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// =============================================
+// Configuration
+// =============================================
+const API_BASE = ''; // Uses relative paths - works on any domain
+let authToken = '';
+let content = {};
+let hasUnsavedChanges = false;
+
+// =============================================
+// Auth
+// =============================================
+function login() {
+  const pw = document.getElementById('passwordInput').value;
+  if (!pw) return;
+
+  fetch(API_BASE + '/api/auth', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password: pw }),
+  })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        authToken = data.token;
+        sessionStorage.setItem('cms_token', authToken);
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        loadContent();
+        showToast('ברוכים הבאים! 👋', 'success');
+      } else {
+        document.getElementById('loginError').style.display = 'block';
+        document.getElementById('passwordInput').value = '';
+        document.getElementById('passwordInput').focus();
+      }
+    })
+    .catch(err => {
+      showToast('שגיאת חיבור לשרת', 'error');
+    });
+}
+
+function logout() {
+  if (hasUnsavedChanges && !confirm('יש שינויים שלא נשמרו. לצאת בכל זאת?')) return;
+  sessionStorage.removeItem('cms_token');
+  authToken = '';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('passwordInput').value = '';
+}
+
+// Auto-login if token exists
+document.addEventListener('DOMContentLoaded', () => {
+  const saved = sessionStorage.getItem('cms_token');
+  if (saved) {
+    authToken = saved;
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadContent();
+  }
+  document.getElementById('passwordInput').addEventListener('keypress', e => {
+    if (e.key === 'Enter') login();
+  });
+});
+
+// =============================================
+// Navigation
+// =============================================
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    navigateTo(item.dataset.section);
+  });
+});
+
+function navigateTo(section) {
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  const navItem = document.querySelector(`.nav-item[data-section="${section}"]`);
+  if (navItem) navItem.classList.add('active');
+  const panel = document.getElementById('sec-' + section);
+  if (panel) panel.classList.add('active');
+}
+
+// =============================================
+// Content Loading
+// =============================================
+function loadContent() {
+  setStatus('טוען...', 'saving');
+  fetch(API_BASE + '/api/content', {
+    headers: authToken ? { 'Authorization': 'Bearer ' + authToken } : {},
+  })
+    .then(r => r.json())
+    .then(data => {
+      content = data;
+      renderAll();
+      setStatus('מחובר', 'online');
+      hasUnsavedChanges = false;
+    })
+    .catch(err => {
+      showToast('שגיאה בטעינת התוכן: ' + err.message, 'error');
+      setStatus('שגיאה', 'saving');
+    });
+}
+
+// =============================================
+// Content Saving
+// =============================================
+function saveAll() {
+  collectAll();
+  setStatus('שומר...', 'saving');
+  fetch(API_BASE + '/api/content', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
+    body: JSON.stringify(content),
+  })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        showToast('✅ כל השינויים נשמרו!', 'success');
+        setStatus('מחובר', 'online');
+        hasUnsavedChanges = false;
+        if (content._meta) {
+          document.getElementById('lastModified').textContent = new Date(data.meta.lastModified).toLocaleString('he-IL');
+          document.getElementById('contentVersion').textContent = 'v' + data.meta.version;
+        }
+      } else {
+        showToast('שגיאה: ' + (data.error || 'Unknown'), 'error');
+      }
+    })
+    .catch(err => showToast('שגיאת שמירה: ' + err.message, 'error'));
+}
+
+function saveSection(section) {
+  collectAll();
+  setStatus('שומר...', 'saving');
+  fetch(API_BASE + '/api/content/' + section, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
+    body: JSON.stringify(content[section]),
+  })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        showToast('✅ הסעיף נשמר!', 'success');
+        setStatus('מחובר', 'online');
+      } else {
+        showToast('שגיאה: ' + (data.error || 'Unknown'), 'error');
+      }
+    })
+    .catch(err => showToast('שגיאת שמירה: ' + err.message, 'error'));
+}
+
+// =============================================
+// Render Functions
+// =============================================
+function renderAll() {
+  // Overview
+  if (content._meta) {
+    document.getElementById('lastModified').textContent = content._meta.lastModified ? new Date(content._meta.lastModified).toLocaleString('he-IL') : '—';
+    document.getElementById('contentVersion').textContent = 'v' + (content._meta.version || 1);
+  }
+  document.getElementById('featCount').textContent = (content.features?.items?.length || 0) + ' פריטים';
+  document.getElementById('testCount').textContent = (content.testimonials?.items?.length || 0) + ' חוות דעת';
+  document.getElementById('planCount').textContent = (content.pricing?.plans?.length || 0) + ' תוכניות';
+  document.getElementById('faqCount').textContent = (content.faq?.items?.length || 0) + ' שאלות';
+
+  // Hero
+  if (content.hero) {
+    setValue('hero-badge', content.hero.badge);
+    setValue('hero-title', content.hero.title);
+    setValue('hero-subtitle', content.hero.subtitle);
+    setValue('hero-cta_primary', content.hero.cta_primary);
+    setValue('hero-cta_secondary', content.hero.cta_secondary);
+    renderHeroFeatures();
+  }
+
+  // Stats
+  if (content.stats) renderStats();
+
+  // Features
+  if (content.features) {
+    setValue('features-title', content.features.title);
+    setValue('features-subtitle', content.features.subtitle);
+    renderFeatures();
+  }
+
+  // Testimonials
+  if (content.testimonials) {
+    setValue('testimonials-title', content.testimonials.title);
+    setValue('testimonials-subtitle', content.testimonials.subtitle);
+    renderTestimonialItems();
+    renderTestimonialScreenshots();
+  }
+
+  // Pricing
+  if (content.pricing) {
+    setValue('pricing-title', content.pricing.title);
+    setValue('pricing-subtitle', content.pricing.subtitle);
+    renderPlans();
+  }
+
+  // FAQ
+  if (content.faq) {
+    setValue('faq-title', content.faq.title);
+    renderFaqs();
+  }
+
+  // Contact
+  if (content.contact) {
+    setValue('contact-title', content.contact.title);
+    setValue('contact-subtitle', content.contact.subtitle);
+  }
+
+  // Site settings
+  if (content.site) {
+    setValue('site-title', content.site.title);
+    setValue('site-description', content.site.description);
+  }
+}
+
+// ===== Hero Features =====
+function renderHeroFeatures() {
+  const list = document.getElementById('hero-features-list');
+  list.innerHTML = '';
+  (content.hero.features || []).forEach((f, i) => {
+    list.innerHTML += `<div class="list-item">
+      <div class="list-item-header"><span class="list-item-title">תכונה ${i+1}</span>
+        <button class="btn btn-danger btn-sm" onclick="removeHeroFeature(${i})">🗑️</button></div>
+      <input type="text" value="${esc(f)}" onchange="markChanged()" data-hero-feat="${i}" style="width:100%;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text)">
+    </div>`;
+  });
+}
+function addHeroFeature() {
+  content.hero.features = content.hero.features || [];
+  content.hero.features.push('תכונה חדשה');
+  renderHeroFeatures(); markChanged();
+}
+function removeHeroFeature(i) {
+  content.hero.features.splice(i, 1);
+  renderHeroFeatures(); markChanged();
+}
+
+// ===== Stats =====
+function renderStats() {
+  const list = document.getElementById('stats-list');
+  list.innerHTML = '';
+  (content.stats || []).forEach((s, i) => {
+    list.innerHTML += `<div class="list-item">
+      <div class="list-item-header"><span class="list-item-title">סטטיסטיקה ${i+1}</span>
+        <button class="btn btn-danger btn-sm" onclick="removeStat(${i})">🗑️</button></div>
+      <div class="form-row">
+        <div class="form-group"><label>ערך</label><input type="text" value="${esc(s.value)}" data-stat-val="${i}" onchange="markChanged()"></div>
+        <div class="form-group"><label>תווית</label><input type="text" value="${esc(s.label)}" data-stat-lbl="${i}" onchange="markChanged()"></div>
+      </div>
+    </div>`;
+  });
+}
+function addStat() {
+  content.stats = content.stats || [];
+  content.stats.push({ value: '0', label: 'תווית חדשה' });
+  renderStats(); markChanged();
+}
+function removeStat(i) { content.stats.splice(i, 1); renderStats(); markChanged(); }
+
+// ===== Features =====
+function renderFeatures() {
+  const list = document.getElementById('features-list');
+  list.innerHTML = '';
+  const items = content.features?.items || [];
+  document.getElementById('featBadge').textContent = items.length;
+  items.forEach((f, i) => {
+    list.innerHTML += `<div class="list-item">
+      <div class="list-item-header"><span class="list-item-title">${esc(f.title) || 'יכולת ' + (i+1)}</span>
+        <button class="btn btn-danger btn-sm" onclick="removeFeature(${i})">🗑️</button></div>
+      <div class="form-group"><label>כותרת</label><input type="text" value="${esc(f.title)}" data-feat-title="${i}" onchange="markChanged()"></div>
+      <div class="form-group"><label>תיאור</label><textarea data-feat-desc="${i}" onchange="markChanged()" rows="2">${esc(f.description)}</textarea></div>
+    </div>`;
+  });
+}
+function addFeature() {
+  content.features.items = content.features.items || [];
+  content.features.items.push({ title: 'יכולת חדשה', description: 'תיאור...' });
+  renderFeatures(); markChanged();
+}
+function removeFeature(i) { content.features.items.splice(i, 1); renderFeatures(); markChanged(); }
+
+// ===== Testimonials (Text) =====
+function renderTestimonialItems() {
+  const list = document.getElementById('testimonials-items-list');
+  list.innerHTML = '';
+  (content.testimonials?.items || []).forEach((t, i) => {
+    list.innerHTML += `<div class="list-item">
+      <div class="list-item-header"><span class="list-item-title">${esc(t.name)}</span>
+        <button class="btn btn-danger btn-sm" onclick="removeTestItem(${i})">🗑️</button></div>
+      <div class="form-row three">
+        <div class="form-group"><label>שם</label><input type="text" value="${esc(t.name)}" data-titem-name="${i}" onchange="markChanged()"></div>
+        <div class="form-group"><label>תפקיד</label><input type="text" value="${esc(t.role)}" data-titem-role="${i}" onchange="markChanged()"></div>
+        <div class="form-group"><label>כוכבים</label><input type="number" min="1" max="5" value="${t.stars||5}" data-titem-stars="${i}" onchange="markChanged()"></div>
+      </div>
+      <div class="form-group"><label>ציטוט</label><textarea data-titem-text="${i}" onchange="markChanged()" rows="2">${esc(t.text)}</textarea></div>
+    </div>`;
+  });
+}
+function addTestimonialItem() {
+  content.testimonials.items = content.testimonials.items || [];
+  content.testimonials.items.push({ name: 'שם', role: 'תפקיד', text: 'ציטוט...', stars: 5 });
+  renderTestimonialItems(); markChanged();
+}
+function removeTestItem(i) { content.testimonials.items.splice(i, 1); renderTestimonialItems(); markChanged(); }
+
+// ===== Testimonials (Screenshots) =====
+function renderTestimonialScreenshots() {
+  const list = document.getElementById('testimonials-screenshots-list');
+  list.innerHTML = '';
+  (content.testimonials?.screenshots || []).forEach((s, i) => {
+    list.innerHTML += `<div class="list-item">
+      <div class="list-item-header"><span class="list-item-title">${esc(s.author)}</span>
+        <button class="btn btn-danger btn-sm" onclick="removeTestScreenshot(${i})">🗑️</button></div>
+      <div class="form-row">
+        <div class="form-group"><label>מחבר</label><input type="text" value="${esc(s.author)}" data-tss-author="${i}" onchange="markChanged()"></div>
+        <div class="form-group"><label>מקור</label><input type="text" value="${esc(s.source)}" data-tss-source="${i}" onchange="markChanged()"></div>
+      </div>
+      <div class="form-group"><label>טקסט</label><input type="text" value="${esc(s.text)}" data-tss-text="${i}" onchange="markChanged()"></div>
+      <div class="form-group"><label>נתיב תמונה</label><input type="text" value="${esc(s.image)}" data-tss-image="${i}" onchange="markChanged()">
+        <div class="form-hint">שם קובץ התמונה בתיקיית חוות דעת</div></div>
+    </div>`;
+  });
+}
+function addTestimonialScreenshot() {
+  content.testimonials.screenshots = content.testimonials.screenshots || [];
+  content.testimonials.screenshots.push({ image: '', source: '', author: '', text: '' });
+  renderTestimonialScreenshots(); markChanged();
+}
+function removeTestScreenshot(i) { content.testimonials.screenshots.splice(i, 1); renderTestimonialScreenshots(); markChanged(); }
+
+// ===== Pricing Plans =====
+function renderPlans() {
+  const list = document.getElementById('pricing-plans-list');
+  list.innerHTML = '';
+  document.getElementById('planCount').textContent = (content.pricing?.plans?.length || 0) + ' תוכניות';
+  (content.pricing?.plans || []).forEach((p, i) => {
+    list.innerHTML += `<div class="card">
+      <div class="card-header"><h3>${esc(p.name)}</h3>
+        <div><label style="font-size:12px;color:var(--muted);margin-left:12px"><input type="checkbox" data-plan-hl="${i}" ${p.highlighted?'checked':''} onchange="markChanged()"> מודגש</label>
+        <button class="btn btn-danger btn-sm" onclick="removePlan(${i})">🗑️</button></div></div>
+      <div class="form-row three">
+        <div class="form-group"><label>שם</label><input type="text" value="${esc(p.name)}" data-plan-name="${i}" onchange="markChanged()"></div>
+        <div class="form-group"><label>מחיר ($)</label><input type="text" value="${esc(p.price)}" data-plan-price="${i}" onchange="markChanged()"></div>
+        <div class="form-group"><label>תקופה</label><input type="text" value="${esc(p.period)}" data-plan-period="${i}" onchange="markChanged()"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>מחיר שנתי</label><input type="text" value="${esc(p.yearly)}" data-plan-yearly="${i}" onchange="markChanged()"></div>
+        <div class="form-group"><label>כפתור</label><input type="text" value="${esc(p.cta)}" data-plan-cta="${i}" onchange="markChanged()"></div>
+      </div>
+      <div class="form-group"><label>תכונות (שורה לכל תכונה)</label>
+        <textarea data-plan-features="${i}" onchange="markChanged()" rows="4">${(p.features||[]).join('\n')}</textarea></div>
+    </div>`;
+  });
+}
+function addPlan() {
+  content.pricing.plans = content.pricing.plans || [];
+  content.pricing.plans.push({ name: 'תוכנית חדשה', price: '0', period: '/חודש', yearly: '', features: ['תכונה'], cta: 'שדרגו', highlighted: false });
+  renderPlans(); markChanged();
+}
+function removePlan(i) { content.pricing.plans.splice(i, 1); renderPlans(); markChanged(); }
+
+// ===== FAQ =====
+function renderFaqs() {
+  const list = document.getElementById('faq-list');
+  list.innerHTML = '';
+  const items = content.faq?.items || [];
+  document.getElementById('faqBadge').textContent = items.length;
+  items.forEach((f, i) => {
+    list.innerHTML += `<div class="list-item">
+      <div class="list-item-header"><span class="list-item-title">${esc(f.question).substring(0,40)}...</span>
+        <button class="btn btn-danger btn-sm" onclick="removeFaq(${i})">🗑️</button></div>
+      <div class="form-group"><label>שאלה</label><input type="text" value="${esc(f.question)}" data-faq-q="${i}" onchange="markChanged()"></div>
+      <div class="form-group"><label>תשובה</label><textarea data-faq-a="${i}" onchange="markChanged()" rows="3">${esc(f.answer)}</textarea></div>
+    </div>`;
+  });
+}
+function addFaq() {
+  content.faq.items = content.faq.items || [];
+  content.faq.items.push({ question: 'שאלה חדשה?', answer: 'תשובה...' });
+  renderFaqs(); markChanged();
+}
+function removeFaq(i) { content.faq.items.splice(i, 1); renderFaqs(); markChanged(); }
+
+// =============================================
+// Collect form data back to content
+// =============================================
+function collectAll() {
+  // Site
+  content.site = content.site || {};
+  content.site.title = getValue('site-title');
+  content.site.description = getValue('site-description');
+
+  // Hero
+  content.hero = content.hero || {};
+  content.hero.badge = getValue('hero-badge');
+  content.hero.title = getValue('hero-title');
+  content.hero.subtitle = getValue('hero-subtitle');
+  content.hero.cta_primary = getValue('hero-cta_primary');
+  content.hero.cta_secondary = getValue('hero-cta_secondary');
+  content.hero.features = collectListValues('[data-hero-feat]');
+
+  // Stats
+  content.stats = collectPairs('[data-stat-val]', '[data-stat-lbl]', 'value', 'label');
+
+  // Features
+  content.features = content.features || {};
+  content.features.title = getValue('features-title');
+  content.features.subtitle = getValue('features-subtitle');
+  content.features.items = collectPairs('[data-feat-title]', '[data-feat-desc]', 'title', 'description');
+
+  // Testimonials items
+  content.testimonials = content.testimonials || {};
+  content.testimonials.title = getValue('testimonials-title');
+  content.testimonials.subtitle = getValue('testimonials-subtitle');
+  const tItems = [];
+  document.querySelectorAll('[data-titem-name]').forEach((el, i) => {
+    tItems.push({
+      name: el.value,
+      role: document.querySelector(`[data-titem-role="${i}"]`)?.value || '',
+      text: document.querySelector(`[data-titem-text="${i}"]`)?.value || '',
+      stars: parseInt(document.querySelector(`[data-titem-stars="${i}"]`)?.value || 5),
+    });
+  });
+  content.testimonials.items = tItems;
+
+  // Testimonials screenshots
+  const tScreens = [];
+  document.querySelectorAll('[data-tss-author]').forEach((el, i) => {
+    tScreens.push({
+      author: el.value,
+      source: document.querySelector(`[data-tss-source="${i}"]`)?.value || '',
+      text: document.querySelector(`[data-tss-text="${i}"]`)?.value || '',
+      image: document.querySelector(`[data-tss-image="${i}"]`)?.value || '',
+    });
+  });
+  content.testimonials.screenshots = tScreens;
+
+  // Pricing
+  content.pricing = content.pricing || {};
+  content.pricing.title = getValue('pricing-title');
+  content.pricing.subtitle = getValue('pricing-subtitle');
+  const plans = [];
+  document.querySelectorAll('[data-plan-name]').forEach((el, i) => {
+    plans.push({
+      name: el.value,
+      price: document.querySelector(`[data-plan-price="${i}"]`)?.value || '0',
+      period: document.querySelector(`[data-plan-period="${i}"]`)?.value || '',
+      yearly: document.querySelector(`[data-plan-yearly="${i}"]`)?.value || '',
+      cta: document.querySelector(`[data-plan-cta="${i}"]`)?.value || '',
+      features: (document.querySelector(`[data-plan-features="${i}"]`)?.value || '').split('\n').filter(l => l.trim()),
+      highlighted: document.querySelector(`[data-plan-hl="${i}"]`)?.checked || false,
+    });
+  });
+  content.pricing.plans = plans;
+
+  // FAQ
+  content.faq = content.faq || {};
+  content.faq.title = getValue('faq-title');
+  content.faq.items = collectPairs('[data-faq-q]', '[data-faq-a]', 'question', 'answer');
+
+  // Contact
+  content.contact = content.contact || {};
+  content.contact.title = getValue('contact-title');
+  content.contact.subtitle = getValue('contact-subtitle');
+}
+
+// =============================================
+// Backup / Restore
+// =============================================
+function downloadBackup() {
+  collectAll();
+  const blob = new Blob([JSON.stringify(content, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'shlemut-ai-backup-' + new Date().toISOString().split('T')[0] + '.json';
+  a.click();
+  showToast('גיבוי הורד בהצלחה', 'success');
+}
+
+function restoreBackup(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      content = JSON.parse(e.target.result);
+      renderAll();
+      showToast('תוכן שוחזר מגיבוי!', 'success');
+      markChanged();
+    } catch(err) {
+      showToast('קובץ גיבוי לא תקין', 'error');
+    }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
+
+function resetContent() {
+  if (!confirm('האם אתה בטוח? כל השינויים יימחקו ויוחזרו לברירת מחדל.')) return;
+  fetch(API_BASE + '/api/content', {
+    method: 'DELETE',
+    headers: { 'Authorization': 'Bearer ' + authToken },
+  })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        loadContent();
+        showToast('התוכן אופס לברירת מחדל', 'info');
+      }
+    });
+}
+
+// =============================================
+// Utilities
+// =============================================
+function setValue(id, val) { const el = document.getElementById(id); if (el) el.value = val || ''; }
+function getValue(id) { return document.getElementById(id)?.value || ''; }
+function esc(s) { return (s || '').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+function markChanged() { hasUnsavedChanges = true; }
+
+function collectListValues(selector) {
+  return Array.from(document.querySelectorAll(selector)).map(el => el.value);
+}
+function collectPairs(sel1, sel2, key1, key2) {
+  const items = [];
+  document.querySelectorAll(sel1).forEach((el, i) => {
+    const pair = {};
+    pair[key1] = el.value;
+    const el2 = document.querySelectorAll(sel2)[i];
+    pair[key2] = el2 ? el2.value : '';
+    items.push(pair);
+  });
+  return items;
+}
+
+function setStatus(text, type) {
+  document.getElementById('statusText').textContent = text;
+  const dot = document.getElementById('statusDot');
+  dot.className = 'status-dot ' + type;
+}
+
+function showToast(msg, type = 'info') {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast ' + type;
+  toast.innerHTML = msg;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 4000);
+}
+
+function refreshPreview() {
+  document.getElementById('previewFrame').src = 'https://shlemut-ai.com?t=' + Date.now();
+}
+
+// Warn before leaving
+window.addEventListener('beforeunload', e => {
+  if (hasUnsavedChanges) { e.preventDefault(); e.returnValue = ''; }
+});
+</script>
+</body>
+</html>
