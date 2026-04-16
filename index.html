@@ -10,6 +10,112 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<style>
+/* ── Fixes & Enhancements ── */
+
+/* Stats: ensure always visible */
+.stats-grid .stat{opacity:1 !important;transform:none !important;}
+
+/* Hero sub: ensure always visible */
+.hero-sub span{opacity:1 !important;transform:none !important;display:inline-flex;align-items:center;gap:4px;}
+
+/* ── Improved RGB Cursor ── */
+.cursor-dot{
+  width:10px !important;height:10px !important;
+  box-shadow:0 0 12px 3px var(--cursor-color,#ff0000),0 0 24px 6px rgba(255,255,255,.08) !important;
+}
+.cursor-ring{
+  width:42px !important;height:42px !important;
+  border:2px solid var(--cursor-color,#ff0000) !important;
+  box-shadow:0 0 10px rgba(255,255,255,.05);
+  opacity:.7;
+}
+.cursor-ring.hover{
+  width:60px !important;height:60px !important;
+  background:rgba(255,255,255,.04) !important;
+  box-shadow:0 0 30px var(--cursor-color,#ff0000) !important;
+  opacity:1;
+}
+/* Fallback cursor for touch/mobile */
+@media(hover:none){
+  body{cursor:auto !important;}
+  .cursor-dot,.cursor-ring{display:none !important;}
+}
+
+/* ── Marketplace RGB Title ── */
+.marketplace .section-title{
+  background:linear-gradient(90deg,#ff0000,#ff8000,#ffff00,#00ff00,#00ffff,#0080ff,#8000ff,#ff0080,#ff0000);
+  background-size:300% 100%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:rgbText 6s linear infinite;
+}
+.mp-highlight{
+  border:2px solid transparent !important;
+  background-image:linear-gradient(rgba(28,28,30,.9),rgba(28,28,30,.9)),linear-gradient(90deg,#ff0000,#ff8000,#ffff00,#00ff00,#00ffff,#8000ff,#ff0080,#ff0000) !important;
+  background-origin:border-box !important;
+  background-clip:padding-box,border-box !important;
+  background-size:100% 100%,300% 100% !important;
+  animation:rgbHighlight 6s linear infinite;
+  box-shadow:0 0 30px rgba(108,99,255,.1),0 0 60px rgba(212,168,67,.05);
+}
+@keyframes rgbHighlight{0%{background-position:center,0% 50%}100%{background-position:center,300% 50%}}
+
+/* ── Download Button — Big RGB ── */
+.download-box .dl-btn{
+  display:inline-block !important;
+  font-size:1.3rem !important;
+  font-weight:800 !important;
+  padding:22px 56px !important;
+  border-radius:50px !important;
+  color:#000 !important;
+  background:linear-gradient(135deg,var(--gold),#e8c460) !important;
+  text-decoration:none !important;
+  text-align:center !important;
+  margin-top:24px !important;
+  position:relative;
+  z-index:1;
+  overflow:visible;
+  transition:transform .3s, box-shadow .3s;
+  box-shadow:
+    0 0 20px rgba(212,168,67,.4),
+    0 0 40px rgba(212,168,67,.2),
+    0 0 60px rgba(212,168,67,.1);
+  animation:dlBtnPulse 2.5s ease-in-out infinite;
+}
+.download-box .dl-btn:hover{
+  transform:translateY(-4px) scale(1.03);
+  box-shadow:
+    0 0 30px rgba(212,168,67,.5),
+    0 0 60px rgba(212,168,67,.3),
+    0 0 90px rgba(212,168,67,.15);
+}
+@keyframes dlBtnPulse{
+  0%,100%{box-shadow:0 0 20px rgba(212,168,67,.4),0 0 40px rgba(212,168,67,.2);}
+  50%{box-shadow:0 0 30px rgba(212,168,67,.6),0 0 60px rgba(212,168,67,.35),0 0 80px rgba(108,99,255,.15);}
+}
+
+/* RGB glow ring around download button */
+.dl-btn-wrap{
+  position:relative;display:inline-block;margin-top:24px;
+}
+.dl-btn-wrap::before{
+  content:'';position:absolute;inset:-4px;border-radius:54px;z-index:0;
+  background:linear-gradient(90deg,#ff0000,#ff8000,#ffff00,#00ff00,#00ffff,#8000ff,#ff0080,#ff0000);
+  background-size:300% 100%;
+  animation:rgbBorder 4s linear infinite;
+  filter:blur(2px);
+  opacity:.7;
+}
+@keyframes rgbBorder{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+
+.download-box{
+  max-width:650px !important;
+  padding:56px 40px !important;
+}
+.download-box h2{
+  font-size:1.8rem !important;
+}
+</style>
 </head>
 <body>
 <!-- Entry Splash -->
@@ -73,10 +179,10 @@
           <a href="#download" class="cta-btn">התחילו בחינם — 10 נקודות ביום</a>
           <a href="#features" class="cta-btn-outline">גלו את היכולות</a>
         </div>
-        <div class="hero-sub">
-          <span><span class="dot"></span> 10 נקודות AI חינם כל יום</span>
-          <span><span class="dot"></span> כלים אופליין ללא הגבלה</span>
-          <span><span class="dot"></span> תמיכה תוך 24 שעות בימי א-ה</span>
+        <div class="hero-sub" style="opacity:1 !important;transform:none !important;">
+          <span style="opacity:1 !important;transform:none !important;"><span class="dot"></span> 10 נקודות AI חינם כל יום</span>
+          <span style="opacity:1 !important;transform:none !important;"><span class="dot"></span> כלים אופליין ללא הגבלה</span>
+          <span style="opacity:1 !important;transform:none !important;"><span class="dot"></span> תמיכה תוך 24 שעות בימי א-ה</span>
         </div>
       </div>
       <!-- Left side: Product Mockup -->
@@ -94,11 +200,11 @@
 <!-- ── Stats ── -->
 <section class="stats">
   <div class="container">
-    <div class="stats-grid">
-      <div class="stat"><span class="num">40+</span><span class="lab">כלים אוטומטיים</span></div>
-      <div class="stat"><span class="num">114</span><span class="lab">פקודות AI</span></div>
-      <div class="stat"><span class="num">300ms</span><span class="lab">עימוד עמוד</span></div>
-      <div class="stat"><span class="num">100%</span><span class="lab">תמיכה בעברית</span></div>
+    <div class="stats-grid" style="opacity:1 !important;transform:none !important;">
+      <div class="stat" style="opacity:1 !important;transform:none !important;"><span class="num">40+</span><span class="lab">כלים אוטומטיים</span></div>
+      <div class="stat" style="opacity:1 !important;transform:none !important;"><span class="num">114</span><span class="lab">פקודות AI</span></div>
+      <div class="stat" style="opacity:1 !important;transform:none !important;"><span class="num">300ms</span><span class="lab">עימוד עמוד</span></div>
+      <div class="stat" style="opacity:1 !important;transform:none !important;"><span class="num">100%</span><span class="lab">תמיכה בעברית</span></div>
     </div>
   </div>
 </section>
@@ -189,6 +295,7 @@
       <p>עד היום, סקריפטים לאינדיזיין היו פזורים בפורומים, בלוגים ואתרים שונים — בלי סטנדרט, בלי אבטחה, ובלי דרך נוחה למכור או לקנות.
       אנחנו בונים את הפלטפורמה הראשונה שמאחדת הכל — חנות אפליקציות לסקריפטים, ישירות מתוך אינדיזיין. כמו App Store, רק לעימוד.</p>
       <p style="margin-top:14px;">כל סקריפט עובר בדיקת איכות ואבטחה לפני פרסום. התקנה בלחיצה אחת. עדכונים אוטומטיים. דירוגים וביקורות מהקהילה. ויוצרים יכולים לבנות עסק שלם סביב הכלים שהם כותבים.</p>
+      <p style="margin-top:14px;color:var(--gold);font-weight:700;">&#127758; ברגע שבניתם סקריפט שימושי ויעיל בעזרת התוסף — תוכלו למכור אותו דרכנו בכל העולם ולהרוויח 70% מכל מכירה!</p>
       <div class="mp-stats">
         <div class="mp-stat"><span class="num">70%</span><span class="lab">עמלה ליוצרים</span></div>
         <div class="mp-stat"><span class="num">$0</span><span class="lab">עלות הצטרפות</span></div>
@@ -282,37 +389,14 @@
     </div>
   </div>
 </section>
-<!-- ── Testimonials ── -->
+<!-- ── Testimonials (Real Customer Screenshots Only) ── -->
 <section class="testimonials">
   <div class="container">
     <div style="text-align:center;">
       <div class="section-tag">מה אומרים</div>
-      <h2 class="section-title">מעצבים שכבר עובדים חכם</h2>
-      <p class="section-sub">אלפי משתמשים בישראל ובעולם כבר עברו לעבודה אוטומטית</p>
+      <h2 class="section-title">מה כותבים עלינו בשטח</h2>
+      <p class="section-sub">צילומי מסך אמיתיים מלקוחות — פורומים, הודעות ומיילים</p>
     </div>
-    <div class="tgrid">
-      <div class="tcard">
-        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p>"חוסך לי לפחות שעתיים על כל ספר. הניקוי האוטומטי לבד שווה את ההשקעה."</p>
-        <div class="author">שרה כ.</div>
-        <div class="role">מעמדת ספרים, ירושלים</div>
-      </div>
-      <div class="tcard">
-        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p>"העימוד האוטומטי של Gemma 4 זה משהו אחר. ספר של 300 עמודים מעומד תוך דקות."</p>
-        <div class="author">דוד מ.</div>
-        <div class="role">מנהל הוצאת ספרים</div>
-      </div>
-      <div class="tcard">
-        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p>"Claude באינדיזיין זה כמו עוזר אישי שמבין עברית, עימוד וסגנונות. מדהים."</p>
-        <div class="author">יעל ר.</div>
-        <div class="role">מעצבת גרפית, תל אביב</div>
-      </div>
-    </div>
-    <!-- Real Customer Screenshots -->
-    <h3 style="text-align:center;margin-top:48px;font-size:1.2rem;font-weight:700;color:var(--gold);">&#128248; מה כותבים עלינו בשטח</h3>
-    <p style="text-align:center;color:var(--muted);font-size:.88rem;margin-bottom:28px;">צילומי מסך אמיתיים מלקוחות — פורומים, הודעות ומיילים</p>
     <div class="tscr-grid">
       <div class="tscr-card forum">
         <img src="assets/testimonials/efirion-publishing.jpg" alt="אפיריון הוצאה לאור" class="tscr-img">
@@ -488,8 +572,10 @@
       <div class="gift-badge">&#127873; גרסה 10 — חינם לתקופה מוגבלת!</div>
       <h2>הורדה חינם</h2>
       <p>הזינו את האימייל שלכם כדי לקבל את התוסף + מפתח רישיון אישי + מדריך התקנה מלא בעברית.</p>
-      <a href="https://ultimate-tools.lemonsqueezy.com/checkout/buy/e7fd713b-7978-434c-a64c-f8b7ab78469c" class="dl-btn" style="display:inline-block;text-align:center;text-decoration:none;margin-top:18px;">הורדה חינם — Studio Shlemut AI v10</a>
-      <div class="disclaimer" style="margin-top:12px;">✅ כולל מפתח רישיון אישי &nbsp;•&nbsp; ✅ התקנה בלחיצה אחת &nbsp;•&nbsp; ✅ תמיכה מלאה בעברית</div>
+      <div class="dl-btn-wrap">
+        <a href="https://ultimate-tools.lemonsqueezy.com/checkout/buy/e7fd713b-7978-434c-a64c-f8b7ab78469c" class="dl-btn">&#11015; הורדה חינם — Studio Shlemut AI v10</a>
+      </div>
+      <div class="disclaimer" style="margin-top:16px;font-size:.8rem;color:var(--muted);">&#10004; כולל מפתח רישיון אישי &nbsp;&bull;&nbsp; &#10004; התקנה בלחיצה אחת &nbsp;&bull;&nbsp; &#10004; תמיכה מלאה בעברית</div>
     </div>
   </div>
 </section>
