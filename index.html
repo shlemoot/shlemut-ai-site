@@ -10,95 +10,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
-<style>
-/* ══════ OVERRIDES & ENHANCEMENTS ══════ */
-
-/* ── Cursor: Default arrow + RGB halo ── */
-body{cursor:default !important;}
-a,button,.faq-q,.cta-btn,.cta-btn-outline,.nav-cta,.plan .btn{cursor:pointer !important;}
-.cursor-dot{display:none !important;}
-.cursor-ring{
-  width:48px !important;height:48px !important;
-  border:none !important;border-radius:50%;
-  background:radial-gradient(circle,rgba(255,255,255,.06) 0%,transparent 70%) !important;
-  box-shadow:0 0 20px 8px var(--cursor-color,#ff0000),0 0 40px 16px rgba(255,255,255,.03) !important;
-  opacity:.6;
-  pointer-events:none;
-  transition:width .25s,height .25s,opacity .2s,box-shadow .2s !important;
-}
-.cursor-ring.hover{
-  width:72px !important;height:72px !important;
-  opacity:.85;
-  box-shadow:0 0 30px 12px var(--cursor-color,#ff0000),0 0 60px 24px rgba(255,255,255,.05) !important;
-}
-@media(hover:none){.cursor-ring{display:none !important;}}
-
-/* ── Stats: force visible ── */
-.stats-grid .stat{opacity:1 !important;transform:none !important;}
-
-/* ── Marketplace RGB ── */
-.marketplace .section-title{
-  background:linear-gradient(90deg,#ff0000,#ff8000,#ffff00,#00ff00,#00ffff,#0080ff,#8000ff,#ff0080,#ff0000);
-  background-size:300% 100%;
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  animation:rgbText 6s linear infinite;
-}
-.mp-highlight{
-  border:2px solid transparent !important;
-  background-image:linear-gradient(rgba(28,28,30,.92),rgba(28,28,30,.92)),linear-gradient(90deg,#ff0000,#ff8000,#ffff00,#00ff00,#00ffff,#8000ff,#ff0080,#ff0000) !important;
-  background-origin:border-box !important;
-  background-clip:padding-box,border-box !important;
-  background-size:100% 100%,300% 100% !important;
-  animation:rgbHighlight 6s linear infinite;
-  box-shadow:0 0 30px rgba(108,99,255,.1),0 0 60px rgba(212,168,67,.05);
-}
-@keyframes rgbHighlight{0%{background-position:center,0% 50%}100%{background-position:center,300% 50%}}
-
-/* ── Download Button: Entry-splash style ── */
-.download-box{
-  max-width:660px !important;padding:56px 40px !important;
-}
-.download-box h2{font-size:1.8rem !important;}
-.dl-btn-entry{
-  display:inline-block;
-  background:rgba(20,20,24,.8);color:#fff;
-  border:2px solid rgba(212,168,67,.4);
-  padding:22px 52px;border-radius:14px;
-  font-family:inherit;font-size:1.2rem;font-weight:800;
-  text-decoration:none;text-align:center;
-  position:relative;overflow:hidden;
-  backdrop-filter:blur(10px);
-  letter-spacing:.5px;
-  transition:all .35s;
-  margin-top:24px;
-}
-.dl-btn-entry::before{
-  content:'';position:absolute;inset:-2px;border-radius:14px;
-  background:linear-gradient(90deg,#ff0000,#ff8000,#ffff00,#00ff00,#00ffff,#8000ff,#ff0080,#ff0000);
-  background-size:300% 100%;
-  animation:rgbBorder 4s linear infinite;
-  z-index:-1;padding:2px;
-  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
-  -webkit-mask-composite:xor;mask-composite:exclude;
-}
-.dl-btn-entry .btn-text{
-  background:linear-gradient(90deg,#ff0000,#ff8000,#ffff00,#00ff00,#00ffff,#8000ff,#ff0080,#ff0000);
-  background-size:300% 100%;
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  animation:rgbText 5s linear infinite;
-}
-.dl-btn-entry:hover{
-  transform:translateY(-3px);
-  box-shadow:0 0 30px rgba(212,168,67,.3),0 0 60px rgba(108,99,255,.15);
-}
-@keyframes rgbBorder{0%{background-position:0% 50%}100%{background-position:300% 50%}}
-
-/* ── Stats grid: 6 columns ── */
-.stats-grid{grid-template-columns:repeat(6,1fr) !important;gap:16px !important;}
-@media(max-width:768px){.stats-grid{grid-template-columns:repeat(3,1fr) !important;}}
-</style>
 </head>
 <body>
+
 <!-- Entry Splash -->
 <div class="entry-splash" id="entrySplash">
   <div class="fog-canvas">
@@ -115,19 +29,23 @@ a,button,.faq-q,.cta-btn,.cta-btn-outline,.nav-cta,.plan .btn{cursor:pointer !im
     <div class="entry-subtitle">ULTIMATE EDITOR &mdash; AI POWERED</div>
   </div>
 </div>
+
 <!-- Background Music -->
 <audio id="bgMusic" loop preload="auto">
   <source src="assets/audio/bg-music.mp3" type="audio/mpeg">
 </audio>
+
 <!-- Music Player (floating) -->
 <div class="music-player" id="musicPlayer">
   <button onclick="toggleMusic()" id="musicToggle" title="השתק/הפעל">&#127925;</button>
   <input type="range" id="musicVol" min="0" max="100" value="20" oninput="setVolume(this.value)">
   <span class="vol-label" id="volLabel">20%</span>
 </div>
-<!-- Custom Cursor (halo only, no dot) -->
+
+<!-- Custom Cursor -->
 <div class="cursor-dot"></div>
 <div class="cursor-ring"></div>
+
 <!-- ── Navigation ── -->
 <nav class="nav">
   <div class="nav-inner">
@@ -143,6 +61,7 @@ a,button,.faq-q,.cta-btn,.cta-btn-outline,.nav-cta,.plan .btn{cursor:pointer !im
     </div>
   </div>
 </nav>
+
 <!-- ── Hero ── -->
 <section class="hero">
   <div class="hero-bg">
@@ -151,38 +70,48 @@ a,button,.faq-q,.cta-btn,.cta-btn-outline,.nav-cta,.plan .btn{cursor:pointer !im
   </div>
   <div class="container">
     <div class="hero-split">
+      <!-- Right side: Text -->
       <div class="hero-text">
         <div class="hero-badge">התוסף שכבש את שוק העימוד בישראל</div>
         <h1>עימוד ספר שלם<br>בלחיצת כפתור</h1>
         <p class="subtitle">שכחו מעבודה ידנית. עורך AI אולטימטיבי הופך את אדובי אינדיזיין למכונה אוטומטית — AI חכם שמבין עברית, 40+ כלים אוטומטיים, ותמלול קולי. הכלי שהחיים הקלים של כל מעצב ומעמד ספרים מתחילים איתו.</p>
         <div class="cta-group">
-          <a href="#download" class="cta-btn">התחילו בחינם</a>
+          <a href="#download" class="cta-btn">התחילו בחינם — 10 נקודות ביום</a>
           <a href="#features" class="cta-btn-outline">גלו את היכולות</a>
         </div>
+        <div class="hero-sub">
+          <span><span class="dot"></span> 10 נקודות AI חינם כל יום</span>
+          <span><span class="dot"></span> כלים אופליין ללא הגבלה</span>
+          <span><span class="dot"></span> תמיכה תוך 24 שעות בימי א-ה</span>
+        </div>
       </div>
+      <!-- Left side: Product Mockup -->
       <div class="hero-mockup-side">
         <img src="assets/images/mockup.png" alt="הדמיה עורך אולטימטיבי" class="hero-mockup">
       </div>
     </div>
+    <!-- Explainer Video Placeholder -->
     <div class="hero-explainer" id="explainerVideo" onclick="playExplainer(this)">
       <div class="play-btn"></div>
       <div class="vid-label">צפו בסרטון הסבר — 2 דקות</div>
     </div>
   </div>
 </section>
-<!-- ── Stats (6 boxes) ── -->
+
+<!-- ── Stats ── -->
 <section class="stats">
   <div class="container">
-    <div class="stats-grid" style="opacity:1 !important;transform:none !important;">
-      <div class="stat" style="opacity:1 !important;transform:none !important;"><span class="num">40+</span><span class="lab">כלים אוטומטיים</span></div>
-      <div class="stat" style="opacity:1 !important;transform:none !important;"><span class="num">114</span><span class="lab">פקודות AI</span></div>
-      <div class="stat" style="opacity:1 !important;transform:none !important;"><span class="num">300ms</span><span class="lab">עימוד עמוד</span></div>
-      <div class="stat" style="opacity:1 !important;transform:none !important;"><span class="num">6</span><span class="lab">מנועי AI</span></div>
-      <div class="stat" style="opacity:1 !important;transform:none !important;"><span class="num">RTL</span><span class="lab">תמיכה מלאה בעברית</span></div>
-      <div class="stat" style="opacity:1 !important;transform:none !important;"><span class="num">24/7</span><span class="lab">עובד גם אופליין</span></div>
+    <div class="stats-grid" style="grid-template-columns:repeat(6,1fr);">
+      <div class="stat"><span class="num">40+</span><span class="lab">כלים אוטומטיים</span></div>
+      <div class="stat"><span class="num">114</span><span class="lab">פקודות AI</span></div>
+      <div class="stat"><span class="num">300ms</span><span class="lab">עימוד עמוד</span></div>
+      <div class="stat"><span class="num">100%</span><span class="lab">תמיכה בעברית</span></div>
+      <div class="stat"><span class="num">6</span><span class="lab">מנועי AI</span></div>
+      <div class="stat"><span class="num">OFFLINE</span><span class="lab">עובד אופליין</span></div>
     </div>
   </div>
 </section>
+
 <!-- ── Features ── -->
 <section class="features" id="features">
   <div class="container">
@@ -240,6 +169,7 @@ a,button,.faq-q,.cta-btn,.cta-btn-outline,.nav-cta,.plan .btn{cursor:pointer !im
     </div>
   </div>
 </section>
+
 <!-- ── Script Marketplace ── -->
 <section class="marketplace" id="marketplace">
   <div class="container">
@@ -270,7 +200,6 @@ a,button,.faq-q,.cta-btn,.cta-btn-outline,.nav-cta,.plan .btn{cursor:pointer !im
       <p>עד היום, סקריפטים לאינדיזיין היו פזורים בפורומים, בלוגים ואתרים שונים — בלי סטנדרט, בלי אבטחה, ובלי דרך נוחה למכור או לקנות.
       אנחנו בונים את הפלטפורמה הראשונה שמאחדת הכל — חנות אפליקציות לסקריפטים, ישירות מתוך אינדיזיין. כמו App Store, רק לעימוד.</p>
       <p style="margin-top:14px;">כל סקריפט עובר בדיקת איכות ואבטחה לפני פרסום. התקנה בלחיצה אחת. עדכונים אוטומטיים. דירוגים וביקורות מהקהילה. ויוצרים יכולים לבנות עסק שלם סביב הכלים שהם כותבים.</p>
-      <p style="margin-top:14px;color:var(--gold);font-weight:700;">&#127758; ברגע שבניתם סקריפט שימושי ויעיל בעזרת התוסף — תוכלו למכור אותו דרכנו בכל העולם ולהרוויח 70% מכל מכירה!</p>
       <div class="mp-stats">
         <div class="mp-stat"><span class="num">70%</span><span class="lab">עמלה ליוצרים</span></div>
         <div class="mp-stat"><span class="num">$0</span><span class="lab">עלות הצטרפות</span></div>
@@ -280,6 +209,7 @@ a,button,.faq-q,.cta-btn,.cta-btn-outline,.nav-cta,.plan .btn{cursor:pointer !im
     </div>
   </div>
 </section>
+
 <!-- ── How it Works ── -->
 <section class="how" id="how">
   <div class="container">
@@ -312,6 +242,7 @@ a,button,.faq-q,.cta-btn,.cta-btn-outline,.nav-cta,.plan .btn{cursor:pointer !im
     </div>
   </div>
 </section>
+
 <!-- ── Feature Screenshots Gallery ── -->
 <section class="screenshots-gallery" id="gallery">
   <div class="container">
@@ -364,14 +295,39 @@ a,button,.faq-q,.cta-btn,.cta-btn-outline,.nav-cta,.plan .btn{cursor:pointer !im
     </div>
   </div>
 </section>
-<!-- ── Testimonials (Real Only) ── -->
+
+<!-- ── Testimonials ── -->
 <section class="testimonials">
   <div class="container">
     <div style="text-align:center;">
       <div class="section-tag">מה אומרים</div>
-      <h2 class="section-title">מה כותבים עלינו בשטח</h2>
-      <p class="section-sub">צילומי מסך אמיתיים מלקוחות — פורומים, הודעות ומיילים</p>
+      <h2 class="section-title">מעצבים שכבר עובדים חכם</h2>
+      <p class="section-sub">אלפי משתמשים בישראל ובעולם כבר עברו לעבודה אוטומטית</p>
     </div>
+    <div class="tgrid">
+      <div class="tcard">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p>"חוסך לי לפחות שעתיים על כל ספר. הניקוי האוטומטי לבד שווה את ההשקעה."</p>
+        <div class="author">שרה כ.</div>
+        <div class="role">מעמדת ספרים, ירושלים</div>
+      </div>
+      <div class="tcard">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p>"העימוד האוטומטי של Gemma 4 זה משהו אחר. ספר של 300 עמודים מעומד תוך דקות."</p>
+        <div class="author">דוד מ.</div>
+        <div class="role">מנהל הוצאת ספרים</div>
+      </div>
+      <div class="tcard">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p>"Claude באינדיזיין זה כמו עוזר אישי שמבין עברית, עימוד וסגנונות. מדהים."</p>
+        <div class="author">יעל ר.</div>
+        <div class="role">מעצבת גרפית, תל אביב</div>
+      </div>
+    </div>
+
+    <!-- Real Customer Screenshots -->
+    <h3 style="text-align:center;margin-top:48px;font-size:1.2rem;font-weight:700;color:var(--gold);">&#128248; מה כותבים עלינו בשטח</h3>
+    <p style="text-align:center;color:var(--muted);font-size:.88rem;margin-bottom:28px;">צילומי מסך אמיתיים מלקוחות — פורומים, הודעות ומיילים</p>
     <div class="tscr-grid">
       <div class="tscr-card forum">
         <img src="assets/testimonials/efirion-publishing.jpg" alt="אפיריון הוצאה לאור" class="tscr-img">
@@ -424,6 +380,7 @@ a,button,.faq-q,.cta-btn,.cta-btn-outline,.nav-cta,.plan .btn{cursor:pointer !im
     </div>
   </div>
 </section>
+
 <!-- ── Free Trial ── -->
 <section class="trial">
   <div class="container">
@@ -434,6 +391,7 @@ a,button,.faq-q,.cta-btn,.cta-btn-outline,.nav-cta,.plan .btn{cursor:pointer !im
     </div>
   </div>
 </section>
+
 <!-- ── Pricing ── -->
 <section class="pricing" id="pricing">
   <div class="container">
@@ -509,6 +467,7 @@ a,button,.faq-q,.cta-btn,.cta-btn-outline,.nav-cta,.plan .btn{cursor:pointer !im
         <a href="#" class="btn">שדרג ל-Premium</a>
       </div>
     </div>
+
     <!-- Comparison Table -->
     <div class="compare-table">
       <table>
@@ -540,18 +499,20 @@ a,button,.faq-q,.cta-btn,.cta-btn-outline,.nav-cta,.plan .btn{cursor:pointer !im
     </div>
   </div>
 </section>
-<!-- ── Download ── -->
+
+<!-- ── Download / Registration ── -->
 <section class="download-section" id="download">
   <div class="container">
     <div class="download-box">
       <div class="gift-badge">&#127873; גרסה 10 — חינם לתקופה מוגבלת!</div>
       <h2>הורדה חינם</h2>
       <p>הזינו את האימייל שלכם כדי לקבל את התוסף + מפתח רישיון אישי + מדריך התקנה מלא בעברית.</p>
-      <a href="https://ultimate-tools.lemonsqueezy.com/checkout/buy/e7fd713b-7978-434c-a64c-f8b7ab78469c" class="dl-btn-entry"><span class="btn-text">&#11015; הורדה חינם — Studio Shlemut AI v10</span></a>
-      <div class="disclaimer" style="margin-top:16px;font-size:.8rem;color:var(--muted);">&#10004; כולל מפתח רישיון אישי &nbsp;&bull;&nbsp; &#10004; התקנה בלחיצה אחת &nbsp;&bull;&nbsp; &#10004; תמיכה מלאה בעברית</div>
+      <a href="https://ultimate-tools.lemonsqueezy.com/checkout/buy/e7fd713b-7978-434c-a64c-f8b7ab78469c" class="dl-btn" style="display:inline-block;text-align:center;text-decoration:none;margin-top:18px;">הורדה חינם — Studio Shlemut AI v10</a>
+      <div class="disclaimer" style="margin-top:12px;">✅ כולל מפתח רישיון אישי &nbsp;•&nbsp; ✅ התקנה בלחיצה אחת &nbsp;•&nbsp; ✅ תמיכה מלאה בעברית</div>
     </div>
   </div>
 </section>
+
 <!-- ── FAQ ── -->
 <section class="faq" id="faq">
   <div class="container">
@@ -599,6 +560,7 @@ a,button,.faq-q,.cta-btn,.cta-btn-outline,.nav-cta,.plan .btn{cursor:pointer !im
     </div>
   </div>
 </section>
+
 <!-- ── Contact / Support ── -->
 <section class="contact" id="contact">
   <div class="container">
@@ -623,6 +585,7 @@ a,button,.faq-q,.cta-btn,.cta-btn-outline,.nav-cta,.plan .btn{cursor:pointer !im
     </div>
   </div>
 </section>
+
 <!-- ── Final CTA ── -->
 <section class="final-cta">
   <div class="container">
@@ -633,6 +596,7 @@ a,button,.faq-q,.cta-btn,.cta-btn-outline,.nav-cta,.plan .btn{cursor:pointer !im
     </div>
   </div>
 </section>
+
 <!-- ── Footer ── -->
 <footer>
   <div class="container">
@@ -654,6 +618,8 @@ a,button,.faq-q,.cta-btn,.cta-btn-outline,.nav-cta,.plan .btn{cursor:pointer !im
     </div>
   </div>
 </footer>
+
 <script src="js/main.js"></script>
+
 </body>
 </html>
