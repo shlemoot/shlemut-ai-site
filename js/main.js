@@ -33,7 +33,7 @@ document.querySelectorAll('.faq-q').forEach(function(q){
       if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';}
     });
   },{threshold:0.1});
-  document.querySelectorAll('.fcard,.plan,.tcard,.step,.stat,.trial-box,.download-box,.mp-card,.mp-highlight,.tscr-card,.hero-explainer,.scr-card').forEach(function(el){
+  document.querySelectorAll('.fcard,.plan,.tcard,.step,.trial-box,.download-box,.mp-card,.mp-highlight,.tscr-card,.hero-explainer,.scr-card').forEach(function(el){
     el.style.opacity='0';el.style.transform='translateY(30px)';
     el.style.transition='opacity .6s ease, transform .6s ease';
     obs.observe(el);
