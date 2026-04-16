@@ -10,6 +10,71 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<style>
+/* ── Cursor: default + RGB halo ── */
+body{cursor:default !important;}
+a,button,.faq-q,.cta-btn,.cta-btn-outline,.nav-cta,.plan .btn{cursor:pointer !important;}
+.cursor-dot{display:none !important;}
+.cursor-ring{
+  width:48px !important;height:48px !important;border:none !important;
+  background:radial-gradient(circle,var(--cursor-color) 0%,transparent 70%) !important;
+  opacity:.25 !important;
+  pointer-events:none;mix-blend-mode:screen;
+}
+.cursor-ring.hover{width:64px !important;height:64px !important;opacity:.35 !important;}
+
+/* ── Stats: 6 columns, always visible ── */
+.stats-grid{grid-template-columns:repeat(6,1fr) !important;max-width:1000px !important;}
+.stat{opacity:1 !important;transform:none !important;}
+
+/* ── Download button: RGB like entry button ── */
+.download-box .dl-btn{
+  background:rgba(20,20,24,.8) !important;color:#fff !important;
+  border:2px solid rgba(212,168,67,.4) !important;
+  padding:18px 44px !important;border-radius:12px !important;
+  font-size:1.1rem !important;font-weight:700 !important;
+  position:relative;overflow:hidden;
+  backdrop-filter:blur(10px);letter-spacing:.5px;
+  text-decoration:none !important;
+}
+.download-box .dl-btn::before{
+  content:'';position:absolute;inset:-2px;border-radius:12px;
+  background:linear-gradient(90deg,#ff0000,#ff8000,#ffff00,#00ff00,#00ffff,#8000ff,#ff0080,#ff0000);
+  background-size:300% 100%;
+  animation:rgbBorder 4s linear infinite;
+  z-index:-1;padding:2px;
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+}
+.download-box .dl-btn .btn-text-dl{
+  background:linear-gradient(90deg,#ff0000,#ff8000,#ffff00,#00ff00,#00ffff,#8000ff,#ff0080,#ff0000);
+  background-size:300% 100%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:rgbText 5s linear infinite;
+}
+
+/* ── Marketplace: RGB title + highlight border ── */
+.marketplace .section-title{
+  background:linear-gradient(90deg,#ff0000,#ff8000,#ffff00,#00ff00,#00ffff,#0080ff,#8000ff,#ff0080,#ff0000) !important;
+  background-size:300% 100% !important;
+  -webkit-background-clip:text !important;-webkit-text-fill-color:transparent !important;background-clip:text !important;
+  animation:rgbText 6s linear infinite !important;
+}
+.mp-highlight{
+  border:2px solid transparent !important;
+  background-image:linear-gradient(rgba(28,28,30,.9),rgba(28,28,30,.9)),linear-gradient(90deg,#ff0000,#ff8000,#ffff00,#00ff00,#00ffff,#8000ff,#ff0080,#ff0000) !important;
+  background-origin:border-box !important;background-clip:padding-box,border-box !important;
+  background-size:100% 100%,300% 100% !important;
+  animation:rgbHighlight 6s linear infinite !important;
+}
+@keyframes rgbHighlight{0%{background-position:0% 0%,0% 50%}100%{background-position:0% 0%,300% 50%}}
+
+/* ── Hero-sub: ensure visible ── */
+.hero-sub{opacity:1 !important;transform:none !important;}
+.hero-sub span{opacity:1 !important;transform:none !important;}
+
+/* ── Testimonials title override ── */
+</style>
 </head>
 <body>
 
@@ -200,6 +265,7 @@
       <p>עד היום, סקריפטים לאינדיזיין היו פזורים בפורומים, בלוגים ואתרים שונים — בלי סטנדרט, בלי אבטחה, ובלי דרך נוחה למכור או לקנות.
       אנחנו בונים את הפלטפורמה הראשונה שמאחדת הכל — חנות אפליקציות לסקריפטים, ישירות מתוך אינדיזיין. כמו App Store, רק לעימוד.</p>
       <p style="margin-top:14px;">כל סקריפט עובר בדיקת איכות ואבטחה לפני פרסום. התקנה בלחיצה אחת. עדכונים אוטומטיים. דירוגים וביקורות מהקהילה. ויוצרים יכולים לבנות עסק שלם סביב הכלים שהם כותבים.</p>
+      <p style="margin-top:14px;color:var(--gold);font-weight:600;">ברגע שבניתם סקריפט שימושי ויעיל בעזרת התוסף — תוכלו למכור אותו דרכנו בכל העולם</p>
       <div class="mp-stats">
         <div class="mp-stat"><span class="num">70%</span><span class="lab">עמלה ליוצרים</span></div>
         <div class="mp-stat"><span class="num">$0</span><span class="lab">עלות הצטרפות</span></div>
@@ -301,32 +367,12 @@
   <div class="container">
     <div style="text-align:center;">
       <div class="section-tag">מה אומרים</div>
-      <h2 class="section-title">מעצבים שכבר עובדים חכם</h2>
-      <p class="section-sub">אלפי משתמשים בישראל ובעולם כבר עברו לעבודה אוטומטית</p>
-    </div>
-    <div class="tgrid">
-      <div class="tcard">
-        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p>"חוסך לי לפחות שעתיים על כל ספר. הניקוי האוטומטי לבד שווה את ההשקעה."</p>
-        <div class="author">שרה כ.</div>
-        <div class="role">מעמדת ספרים, ירושלים</div>
-      </div>
-      <div class="tcard">
-        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p>"העימוד האוטומטי של Gemma 4 זה משהו אחר. ספר של 300 עמודים מעומד תוך דקות."</p>
-        <div class="author">דוד מ.</div>
-        <div class="role">מנהל הוצאת ספרים</div>
-      </div>
-      <div class="tcard">
-        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p>"Claude באינדיזיין זה כמו עוזר אישי שמבין עברית, עימוד וסגנונות. מדהים."</p>
-        <div class="author">יעל ר.</div>
-        <div class="role">מעצבת גרפית, תל אביב</div>
-      </div>
+      <h2 class="section-title">מה כותבים עלינו בשטח</h2>
+      <p class="section-sub">צילומי מסך אמיתיים מלקוחות — פורומים, הודעות ומיילים</p>
     </div>
 
     <!-- Real Customer Screenshots -->
-    <h3 style="text-align:center;margin-top:48px;font-size:1.2rem;font-weight:700;color:var(--gold);">&#128248; מה כותבים עלינו בשטח</h3>
+    <h3 style="text-align:center;margin-top:8px;font-size:1.2rem;font-weight:700;color:var(--gold);">&#128248; ביקורות אמיתיות</h3>
     <p style="text-align:center;color:var(--muted);font-size:.88rem;margin-bottom:28px;">צילומי מסך אמיתיים מלקוחות — פורומים, הודעות ומיילים</p>
     <div class="tscr-grid">
       <div class="tscr-card forum">
@@ -507,7 +553,7 @@
       <div class="gift-badge">&#127873; גרסה 10 — חינם לתקופה מוגבלת!</div>
       <h2>הורדה חינם</h2>
       <p>הזינו את האימייל שלכם כדי לקבל את התוסף + מפתח רישיון אישי + מדריך התקנה מלא בעברית.</p>
-      <a href="https://ultimate-tools.lemonsqueezy.com/checkout/buy/e7fd713b-7978-434c-a64c-f8b7ab78469c" class="dl-btn" style="display:inline-block;text-align:center;text-decoration:none;margin-top:18px;">הורדה חינם — Studio Shlemut AI v10</a>
+      <a href="https://ultimate-tools.lemonsqueezy.com/checkout/buy/e7fd713b-7978-434c-a64c-f8b7ab78469c" class="dl-btn" style="display:inline-block;text-align:center;text-decoration:none;margin-top:18px;"><span class="btn-text-dl">הורדה חינם — Studio Shlemut AI v10</span></a>
       <div class="disclaimer" style="margin-top:12px;">✅ כולל מפתח רישיון אישי &nbsp;•&nbsp; ✅ התקנה בלחיצה אחת &nbsp;•&nbsp; ✅ תמיכה מלאה בעברית</div>
     </div>
   </div>
